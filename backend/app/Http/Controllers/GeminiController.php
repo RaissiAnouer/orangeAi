@@ -27,7 +27,15 @@ class GeminiController extends Controller
         return response()->json(['error'=>'something went wrong'],500);
     }
     $reply = $response->json();
-    $outputText = $reply['candidates'][0]['content'][0]['text']?? 'No reply';
+    $outputText="No reply";
+    if(!empty($reply['candidates'])){
+        $candidate = $reply['candidates'][0];
+        if(!empty($candidate['content']['parts'])){
+            $outputText=$candidate['content']['parts'][0]['text'] ?? 'No reply';
+        }
+        
+    }
+
     return response()->json(['reply'=> $outputText]);
 
 
