@@ -37,7 +37,5 @@ class GeminiController extends Controller
     }
 
     return response()->json(['reply'=> $outputText]);
-
-
     }
 }

@@ -14,8 +14,6 @@ const Hero = () => {
   const [charIndex, setCharIndex] = useState(0);
 
   useEffect(() => {
-    if (phraseIndex >= placeholders.length) return;
-
     if (charIndex < placeholders[phraseIndex].length) {
       const timeout = setTimeout(() => {
         setDisplayedText((prev) => prev + placeholders[phraseIndex][charIndex]);
@@ -31,7 +29,6 @@ const Hero = () => {
       return () => clearTimeout(timeout);
     }
   }, [charIndex, phraseIndex]);
-
   return (
     <div className=" flex flex-col items-center justify-center pt-20">
       <p className="text-md sm:text-2xl pb-5">Ready To Generate Code ?</p>
@@ -41,7 +38,6 @@ const Hero = () => {
         <br />
         <p className="py-5"> Empowers Developers</p>
       </h1>
-
       <div className="flex flex-col sm:flex-row gap-8  pt-10 sm:pt-20">
         <div className="relative flex justify-center w-full flex-col sm:flex-row gap-4">
           <div className="absolute inset-0 flex justify-center">
