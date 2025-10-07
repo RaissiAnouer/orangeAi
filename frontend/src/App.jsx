@@ -11,14 +11,12 @@ import Dashboard from "./pages/Dashboard";
 const App = () => {
   return (
     <>
-      <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
-        <ToastContainer />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/Chat" element={<Chat />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </div>
+      <ToastContainer />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/Chat" element={<Chat />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
