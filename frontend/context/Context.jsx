@@ -19,7 +19,6 @@ const ContextProvider = (props) => {
   };
 
   //send message and recive a reply from gemini api
-
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     const response = await axios.post(
@@ -30,6 +29,7 @@ const ContextProvider = (props) => {
     if (!response) {
       toast.error("failled to send message");
     } else {
+      setReply(response.data.reply);
       toast.success(response.data.reply);
     }
   };
@@ -44,6 +44,8 @@ const ContextProvider = (props) => {
         message,
         setMessage,
         onSubmitHandler,
+        reply,
+        setReply,
       }}
     >
       {props.children}
