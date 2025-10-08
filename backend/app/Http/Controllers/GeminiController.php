@@ -32,10 +32,8 @@ class GeminiController extends Controller
         $candidate = $reply['candidates'][0];
         if(!empty($candidate['content']['parts'])){
             $outputText=$candidate['content']['parts'][0]['text'] ?? 'No reply';
-        }
-        
+        }   
     }
-
     return response()->json(['reply'=> $outputText]);
     }
 }
