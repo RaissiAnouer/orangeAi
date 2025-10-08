@@ -29,7 +29,11 @@ const Dashboard = () => {
         <div className="w-[59vw] bg-red-500 mx-auto mt-20 rounded-full rounded-t-r-none  ">
           {reply}
         </div>
-        <div className="relative flex justify-center items-center my-auto">
+        <div
+          className={`relative flex justify-center items-center ${
+            reply === "" ? "my-[30vh] " : "mt-[60vh] "
+          } transition-all duration-300 ease-in-out `}
+        >
           <div className="hidden md:block absolute bottom-0 w-[800px] h-[120px] bg-orange-300 opacity-40 blur-2xl rounded-full "></div>
 
           <form
