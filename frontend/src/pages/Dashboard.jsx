@@ -32,7 +32,7 @@ const Dashboard = () => {
         </div>
         <div
           className={`z-50 absolute flex justify-center items-center ${
-            reply === "" ? " bottom-0" : "bottom-0 right-0 left-0 "
+            reply === "" ? " inset-0 " : "bottom-0 right-0 left-0 "
           } transition-all duration-300 ease-in-out `}
         >
           <div className="hidden md:block absolute bottom-0 w-[800px] h-[120px] bg-orange-300 opacity-40 blur-2xl rounded-full "></div>
