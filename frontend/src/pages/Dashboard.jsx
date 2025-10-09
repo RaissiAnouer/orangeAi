@@ -35,8 +35,6 @@ const Dashboard = () => {
             reply === "" ? " inset-0 " : "bottom-0 right-0 left-0 "
           } transition-all duration-300 ease-in-out `}
         >
-          <div className="hidden md:block absolute bottom-0 w-[800px] h-[120px] bg-orange-300 opacity-40 blur-2xl rounded-full "></div>
-
           <form
             onSubmit={onSubmitHandler}
             className="relative z-10 bg-white mx-auto my-auto w-[90%] lg:w-4xl shadow-md h-[80px] rounded-lg border border-black/10 flex items-center px-4"
