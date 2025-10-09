@@ -9,8 +9,8 @@ export const Context = createContext();
 const ContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
-  const [message, setMessage] = useState("");
-  const [reply, setReply] = useState("");
+  const [message, setMessage] = useState([]);
+  const [reply, setReply] = useState([]);
 
   const [currentState, setCurrentState] = useState("");
   const value = {
@@ -29,7 +29,7 @@ const ContextProvider = (props) => {
     if (!response) {
       toast.error("failled to send message");
     } else {
-      setReply(response.data.reply);
+      setReply((prev) => [...prev, response.data.reply]);
       toast.success(response.data.reply);
     }
   };
