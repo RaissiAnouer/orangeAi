@@ -10,7 +10,7 @@ const ContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
   const [message, setMessage] = useState([]);
-  const [reply, setReply] = useState([]);
+  const [input, setInput] = useState("");
 
   const [currentState, setCurrentState] = useState("");
   const value = {
@@ -21,15 +21,21 @@ const ContextProvider = (props) => {
   //send message and recive a reply from gemini api
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setMessage((prev) => [...prev, { sender: "user", text: input }]);
     const response = await axios.post(
       backendUrl + "/api/chat",
-      { message }
+      { message: input }
       //  { headers: { Authorization: `Bearer: ${token}` } }
     );
     if (!response) {
       toast.error("failled to send message");
     } else {
-      setReply((prev) => [...prev, response.data.reply]);
+      toast.success(response.data.reply);
+      setInput("");
+      setMessage((prev) => [
+        ...prev,
+        { sender: "ai", text: response.data.reply },
+      ]);
       toast.success(response.data.reply);
     }
   };
@@ -44,8 +50,8 @@ const ContextProvider = (props) => {
         message,
         setMessage,
         onSubmitHandler,
-        reply,
-        setReply,
+        input,
+        setInput,
       }}
     >
       {props.children}
