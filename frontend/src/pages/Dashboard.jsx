@@ -6,7 +6,8 @@ import { Context } from "../../context/context";
 import { toast } from "react-toastify";
 
 const Dashboard = () => {
-  const { setMessage, onSubmitHandler, reply } = useContext(Context);
+  const { setMessage, message, onSubmitHandler, setInput, input } =
+    useContext(Context);
 
   return (
     <div className="flex w-full h-screen overflow-hidden">
@@ -26,16 +27,30 @@ const Dashboard = () => {
           </div>
           <img src={assets.avatar} className="h-10 w-10" alt="" />
         </div>
-        {reply.map((rply, idx) => (
-          <div className="w-[30%] h-[600px] overflow-y-auto ">
-            <div className="  mx-auto mt-5 pb-30 gap-2" key={idx}>
-              {rply}
+
+        <div className="w-full h-[600px] overflow-y-auto space-y-4">
+          {message.map((msg, idx) => (
+            <div
+              className={`flex ${
+                msg.sender === "user" ? "justify-end" : "justify-start"
+              } mr-auto mt-5 pb-30 gap-2`}
+              key={idx}
+            >
+              <span
+                className={`inline-block p-2 rounded-lg max-w-[70%] ${
+                  msg.sender === "user"
+                    ? "bg-orange-500 text-white"
+                    : "bg-gray-200 text-gray-800"
+                }`}
+              >
+                {msg.text}
+              </span>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
         <div
           className={`z-50 absolute flex justify-center items-center ${
-            reply === "" ? " inset-0 " : "bottom-0 right-0 left-0 "
+            input === "" ? " inset-0 " : "bottom-0 right-0 left-0 "
           } transition-all duration-300 ease-in-out `}
         >
           <form
@@ -43,7 +58,8 @@ const Dashboard = () => {
             className="relative z-10 bg-white mx-auto my-auto w-[90%] lg:w-4xl shadow-md h-[80px] rounded-lg border border-black/10 flex items-center px-4"
           >
             <input
-              onChange={(e) => setMessage((prev) => [...prev, e.target.value])}
+              onChange={(e) => setInput(e.target.value)}
+              value={input}
               className="flex-1 h-full px-3 py-2 focus:outline-none"
               placeholder="Type a message..."
             />
