@@ -8,6 +8,7 @@ on:
 
 jobs:
   build_&_push_docker_image:
+    runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: action/checkout@5
