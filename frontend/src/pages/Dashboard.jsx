@@ -57,7 +57,7 @@ const Dashboard = () => {
           ))}
         </div>
         <div
-          className={`flex flex-1  ${
+          className={`flex flex-1 ${
             isEmpty === true
               ? "items-center justify-center"
               : "justify-center items-end"
