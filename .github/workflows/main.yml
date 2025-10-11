@@ -1,1 +1,21 @@
+name: orangeAi workflow
 
+on:
+  push:
+    branches:
+      - main
+      - "releases/**"
+
+jobs:
+  build_&_push_docker_image:
+    steps:
+      - name: Check out code
+        uses: action/checkout@5
+
+      - name: build and push image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: docker-hub-repo/image-name
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
