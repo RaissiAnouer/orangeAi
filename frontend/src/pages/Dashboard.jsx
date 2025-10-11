@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { assets } from "../assets/assets";
 import axios from "axios";
@@ -6,8 +6,18 @@ import { Context } from "../../context/Context";
 import { toast } from "react-toastify";
 
 const Dashboard = () => {
-  const { setMessage, message, onSubmitHandler, setInput, input } =
-    useContext(Context);
+  const {
+    setMessage,
+    message,
+    onSubmitHandler,
+    setInput,
+    input,
+    setIsEmpty,
+    isEmpty,
+  } = useContext(Context);
+  useEffect(() => {
+    setIsEmpty(true);
+  }, []);
 
   return (
     <div className="flex w-full h-screen overflow-hidden">
@@ -48,7 +58,7 @@ const Dashboard = () => {
         </div>
         <div
           className={`flex flex-1  ${
-            input === ""
+            isEmpty === true
               ? "items-center justify-center"
               : "justify-center items-end"
           } transition-all duration-300 ease-in-out `}

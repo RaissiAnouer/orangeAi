@@ -11,6 +11,7 @@ const ContextProvider = (props) => {
   const navigate = useNavigate();
   const [message, setMessage] = useState([]);
   const [input, setInput] = useState("");
+  const [isEmpty, setIsEmpty] = useState(true);
 
   const [currentState, setCurrentState] = useState("");
   const value = {
@@ -21,6 +22,7 @@ const ContextProvider = (props) => {
   //send message and recive a reply from gemini api
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    if (input !== "") setIsEmpty(false);
     setMessage((prev) => [...prev, { sender: "user", text: input }]);
     const response = await axios.post(
       backendUrl + "/api/chat",
@@ -52,6 +54,8 @@ const ContextProvider = (props) => {
         onSubmitHandler,
         input,
         setInput,
+        setIsEmpty,
+        isEmpty,
       }}
     >
       {props.children}
