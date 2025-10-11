@@ -8,11 +8,6 @@ RUN apt-get update && apt-get install -y \
 
 RUN a2enmod rewrite
 
-COPY composer.json  ./
-
-RUN curl -sS https://getcomposer.org/installer | php -- \
-    && mv composer.phar /usr/local/bin/composer
-
 RUN composer install --no-dev --optimize-autoloader
 
 COPY . .
