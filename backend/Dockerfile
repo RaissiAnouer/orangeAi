@@ -4,6 +4,7 @@ FROM php:8.2-apache
 RUN apt-get update && \
     apt-get install -y \
     libzip-dev \
+    libpq-dev \
     zip
 
 # Enable mod_rewrite
