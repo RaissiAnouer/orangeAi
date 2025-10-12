@@ -22,19 +22,3 @@ jobs:
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-    build_push_frontend_image:
-      runs-on: ubuntu-latest
-      steps:
-        - name: check out code
-          uses: actions/checkoutv5
-
-        - name: build and push frontend image
-          uses: mr-smithers-excellent/docker-build-push@v6
-          context: ./frontend
-          with:
-            image: raissianouer/orangeai_frontend
-            registry: docker.io
-            dockerfile: Dockerfile
-            username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_PASSWORD }}
