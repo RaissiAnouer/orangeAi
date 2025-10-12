@@ -7,18 +7,34 @@ on:
       - "releases/**"
 
 jobs:
-  build_push_docker_image:
+  build_push_backend_image:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v5
 
-      - name: build and push image
+      - name: build and push backend image
         uses: mr-smithers-excellent/docker-build-push@v6
+        context: ./backend
         with:
           image: raissianouer/orangeai_backend
           registry: docker.io
-          dockerfile: ./backend/Dockerfile
-          context: ./backend
+          dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+    build_push_frontend_image:
+      runs-on: ubuntu-latest
+      steps:
+        - name: check out code
+          uses: actions/checkoutv5
+
+        - name: build and push frontend image
+          uses: mr-smithers-excellent/docker-build-push@v6
+          context: ./backend
+          with:
+            image: raissianouer/orangeai_frontend
+            registry: docker.io
+            dockerfile: Dockerfile
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
