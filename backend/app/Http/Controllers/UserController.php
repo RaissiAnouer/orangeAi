@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -23,10 +24,15 @@ class UserController extends Controller
         ]);
         $validatedData["password"]=Hash::make($validatedData["password"]);
         $user=User::create($validatedData);
-        return response()->json(['message'=>'user created successfully'],201);
+        
+        return response()->json(['success'=>true,'message'=>'user created successfully'],201);
     }
     public function login(Request $request)
     {
-        //
+        if(!Auth::attempt($request->only('email','password'))) 
+            return response()->json(['success'=>false,'message'=>'email adress or the password is wrong'],401);
+        $user=Auth::user();
+        $token=$user->createToken('token')->plainTextToken;
+        return response()->json(['success'=>true,'message'=>'Login successful!','token'=>$token]);
     }
 }
