@@ -16,16 +16,13 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
+        $validatedData=$request->validate([
             "name"=>"required|string|max:255|min:2",
             "email"=>"required|email|max:250",
             "password"=>"required|string|confirmed"
         ]);
-        $user=User::create([
-        'name'=>$request->name,
-        'email'=>$request->email,
-        'password'=>Hash::make($request->password)
-        ]);
+        $validatedData["password"]=Hash::make($validatedData["password"]);
+        $user=User::create($validatedData);
         return response()->json(['message'=>'user created successfully'],201);
     }
     public function login(Request $request)
