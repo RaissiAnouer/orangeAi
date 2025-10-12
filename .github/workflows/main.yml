@@ -22,17 +22,17 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-    build_push_frontend_image:
-      runs-on: ubuntu-latest
-      steps:
-        - name: check out code
-          uses: actions/checkoutv5
+  build_push_frontend_image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out code
+        uses: actions/checkoutv5
 
-        - name: build and push frontend image
-          uses: mr-smithers-excellent/docker-build-push@v6
-          with:
-            image: raissianouer/orangeai_frontend
-            registry: docker.io
-            dockerfile: ./frontend/Dockerfile
-            username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: build and push frontend image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: raissianouer/orangeai_frontend
+          registry: docker.io
+          dockerfile: ./frontend/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
