@@ -4,31 +4,27 @@ import axios from "axios";
 import { assets } from "../assets/assets";
 import Buttons from "../components/Buttons";
 import SButton from "../components/SButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../../context/context";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const { currentState, setCurrentState, backendUrl, navigate } =
     useContext(Context);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmation: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password_confirmation, setPassword_confirmation] = useState("");
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+    const navigate = useNavigate;
+
     try {
       if (currentState === "login") {
         const response = await axios.post(backendUrl + "/api/login", {
-          email: formData.email,
-          password: formData.password,
+          email,
+          password,
         });
         if (response.data.success) {
           //setToken(response.data.token);
@@ -36,14 +32,22 @@ const Login = () => {
         }
       } else {
         const response = await axios.post(backendUrl + "/api/register", {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          password_confirmation: formData.confirmation,
+          name,
+          email,
+          password,
+          password_confirmation,
         });
+        if (response.success.true) {
+          if (currentState === "login") {
+            navigate("/dashboard");
+          } else {
+            navigate("/login");
+          }
+          toast.success("account ");
+        }
       }
     } catch (error) {
-      console.error("Error:", error.response?.data || error.message);
+      console.log(error);
       alert("Something went wrong. Check console for details.");
     }
   };
@@ -68,12 +72,12 @@ const Login = () => {
               {currentState === "signup" ? (
                 <input
                   name="name"
-                  value={formData.name}
+                  value={name}
                   className="w-2/3 sm:w-2/5 py-1 px-3 border border-2 rounded"
                   type="text"
                   placeholder="Name"
                   required
-                  onChange={handleChange}
+                  onChange={(e) => setName(e.target.value)}
                 />
               ) : (
                 ""
@@ -81,27 +85,27 @@ const Login = () => {
               <input
                 name="email"
                 className="w-2/3 sm:w-2/5 py-1 px-3 border border-2 rounded"
-                value={formData.email}
+                value={email}
                 type="email"
                 placeholder="Your Email"
-                onChange={handleChange}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <input
                 name="password"
                 className="w-2/3 sm:w-2/5 py-1 rounded border border-2 px-3"
-                value={formData.password}
+                value={password}
                 type="password"
                 placeholder="Your Password"
-                onChange={handleChange}
+                onChange={(e) => setPassword(e.target.value)}
               />
               {currentState === "signup" ? (
                 <input
                   name="confirmation"
-                  value={formData.confirmation}
+                  value={password_confirmation}
                   type="password"
                   placeholder="password confiramtion"
                   required
-                  onChange={handleChange}
+                  onChange={(e) => setPassword_confirmation(e.target.value)}
                 />
               ) : (
                 ""
