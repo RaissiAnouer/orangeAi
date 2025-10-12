@@ -31,7 +31,7 @@ jobs:
 
         - name: build and push frontend image
           uses: mr-smithers-excellent/docker-build-push@v6
-          context: ./backend
+          context: ./frontend
           with:
             image: raissianouer/orangeai_frontend
             registry: docker.io
