@@ -1,16 +1,23 @@
 FROM php:8.4
 
-# Install composer:
+# Install composer
 RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/1b137f8bf6db3e79a38a5bc45324414a6b1f9df2/web/installer -O - -q | php -- --quiet
 RUN mv composer.phar /usr/local/bin/composer
 
-RUN mkdir -p /home/winpc/test/laravelApp/app
-WORKDIR /home/winpc/test/laravelApp/app
+# Set working directory
+WORKDIR /app
 
-COPY composer.json /home/winpc/test/laravelApp/app
-RUN composer install
+# Copy composer files
+COPY composer.json composer.lock /app/
 
-COPY . /home/winpc/test/laravelApp/app
+# Install dependencies
+RUN composer install --no-dev --no-interaction --optimize-autoloader
 
-CMD php artisan serve --host=0.0.0.0 --port=8181
+# Copy application code
+COPY . /app
+
+# Expose port
 EXPOSE 8181
+
+# Start Laravel server
+CMD php artisan serve --host=0.0.0.0 --port=8181
