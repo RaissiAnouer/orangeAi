@@ -2,24 +2,21 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 
 import { assets } from "../assets/assets";
-import Buttons from "../components/Buttons";
-import SButton from "../components/SButton";
+
 import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../../context/context";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const { currentState, setCurrentState, backendUrl, navigate } =
-    useContext(Context);
+  const { currentState, setCurrentState, backendUrl } = useContext(Context);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password_confirmation, setPassword_confirmation] = useState("");
+  const navigate = useNavigate();
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    const navigate = useNavigate;
-
     try {
       if (currentState === "login") {
         const response = await axios.post(backendUrl + "/api/login", {
@@ -37,13 +34,13 @@ const Login = () => {
           password,
           password_confirmation,
         });
-        if (response.success.true) {
+        if (response.data.success) {
           if (currentState === "login") {
             navigate("/dashboard");
           } else {
-            navigate("/login");
+            toast.success("account created");
+            setCurrentState("login");
           }
-          toast.success("account ");
         }
       }
     } catch (error) {
@@ -104,6 +101,7 @@ const Login = () => {
                   value={password_confirmation}
                   type="password"
                   placeholder="password confiramtion"
+                  className="w-2/3 sm:w-2/5 py-1 px-3 border border-2 rounded"
                   required
                   onChange={(e) => setPassword_confirmation(e.target.value)}
                 />

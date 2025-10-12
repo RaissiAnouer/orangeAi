@@ -13,11 +13,7 @@ const ContextProvider = (props) => {
   const [input, setInput] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
 
-  const [currentState, setCurrentState] = useState("");
-  const value = {
-    navigate,
-    backendUrl,
-  };
+  const [currentState, setCurrentState] = useState("login");
 
   //send message and recive a reply from gemini api
   const onSubmitHandler = async (e) => {
