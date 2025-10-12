@@ -1,23 +1,32 @@
-FROM php:8.4
-
-# Install composer
-RUN wget https://raw.githubusercontent.com/composer/getcomposer.org/1b137f8bf6db3e79a38a5bc45324414a6b1f9df2/web/installer -O - -q | php -- --quiet
-RUN mv composer.phar /usr/local/bin/composer
-
-# Set working directory
-WORKDIR /app
-
-# Copy composer files
-COPY composer.json composer.lock /app/
+FROM php:8.2-apache
 
 # Install dependencies
-RUN composer install --no-dev --no-interaction --optimize-autoloader
+RUN apt-get update && \
+    apt-get install -y \
+    libzip-dev \
+    zip
 
-# Copy application code
-COPY . /app
+# Enable mod_rewrite
+RUN a2enmod rewrite
 
-# Expose port
-EXPOSE 8181
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql zip
 
-# Start Laravel server
-CMD php artisan serve --host=0.0.0.0 --port=8181
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+# Copy the application code
+COPY . /var/www/html
+
+# Set the working directory
+WORKDIR /var/www/html
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Install project dependencies
+RUN composer install
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
