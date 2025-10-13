@@ -4,6 +4,7 @@ import { assets } from "../assets/assets";
 import axios from "axios";
 import { Context } from "../../context/Context";
 import { toast } from "react-toastify";
+import { ThreeDot } from "react-loading-indicators";
 
 const Dashboard = () => {
   const {
@@ -14,7 +15,8 @@ const Dashboard = () => {
     input,
     setIsEmpty,
     isEmpty,
-    loadingHandler,
+    isLoading,
+    isLoadingHandler,
   } = useContext(Context);
   return (
     <div className="flex w-full h-screen overflow-hidden">
@@ -39,7 +41,7 @@ const Dashboard = () => {
           {message.map((msg, idx) => (
             <div
               className={`flex ${
-                msg.sender === "user" ? "justify-end" : "justify-start"
+                msg.sender === "user" ? "justify-end" : `justify-start`
               } mr-auto mt-5 gap-2`}
               key={idx}
             >
@@ -52,6 +54,15 @@ const Dashboard = () => {
               </span>
             </div>
           ))}
+          {isLoading && (
+            <ThreeDot
+              variant="pulsate"
+              color="#FF9800"
+              size="small"
+              text=""
+              textColor=""
+            />
+          )}
         </div>
         <div
           className={`flex  flex-1 ${
@@ -70,7 +81,6 @@ const Dashboard = () => {
           <form
             onSubmit={(e) => {
               onSubmitHandler(e);
-              loadingHandler(e);
             }}
             className="flex flex-col "
           >
