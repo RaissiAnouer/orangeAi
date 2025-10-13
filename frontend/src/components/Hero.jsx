@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Context } from "../../context/Context";
+import { toast } from "react-toastify";
 
 const Hero = () => {
   const placeholders = [
@@ -12,6 +14,8 @@ const Hero = () => {
   const [displayedText, setDisplayedText] = useState("");
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
+  let navigate = useNavigate();
+  const { setInput, input, onSubmitHandler } = useContext(Context);
 
   useEffect(() => {
     if (charIndex < placeholders[phraseIndex].length) {
@@ -43,17 +47,24 @@ const Hero = () => {
           <div className="absolute inset-0 flex justify-center">
             <div className="w-[500px] h-[120px] bg-orange-300 opacity-40 blur-2xl rounded-full"></div>
           </div>
-          <input
-            type="text"
-            placeholder={displayedText}
-            className="z-10 px-4 py-3 border-2 border-[#ff7300] rounded-md w-[300px] sm:w-[500px] bg-white"
-          />
-          <Link
-            to="/dashboard"
-            className=" z-10 bg-black text-white text-lg font-semibold px-4 w-[300px] sm:w-auto py-3 rounded hover:scale-110 transition-all ease-in-out cursor-pointer"
-          >
-            Generate code
-          </Link>
+          <form className="z-10" onSubmit={onSubmitHandler}>
+            <input
+              type="text"
+              value={input}
+              placeholder={displayedText}
+              onChange={(e) => setInput(e.target.value)}
+              className="z-10 px-4 py-3 border-2 border-[#ff7300] rounded-md w-[300px] sm:w-[500px] bg-white"
+            />
+            <button
+              onClick={(e) => {
+                navigate("/dashboard");
+              }}
+              type="submit"
+              className=" z-10 bg-black text-white text-lg font-semibold px-4 w-[300px] sm:w-auto py-3 rounded hover:scale-110 transition-all ease-in-out cursor-pointer"
+            >
+              Generate code
+            </button>
+          </form>
         </div>
       </div>
     </div>
