@@ -12,7 +12,7 @@ const ContextProvider = (props) => {
   const [message, setMessage] = useState([]);
   const [input, setInput] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [currentState, setCurrentState] = useState("login");
   //send message and recive a reply from gemini api
@@ -36,17 +36,17 @@ const ContextProvider = (props) => {
     }
   };
 
-  const loadingHandler = () => {
+  const isLoadingHandler = () => {
     let senderCount = message.filter((msg) => msg.sender === "user").length;
     let aiCount = message.filter((msg) => msg.sender === "ai").length;
     if (senderCount > aiCount) {
-      setLoading(true);
+      setIsLoading(true);
     } else {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
   useEffect(() => {
-    loadingHandler();
+    isLoadingHandler();
   }, [message]);
 
   return (
@@ -63,8 +63,8 @@ const ContextProvider = (props) => {
         setInput,
         setIsEmpty,
         isEmpty,
-        loading,
-        setLoading,
+        isLoading,
+        setIsLoading,
       }}
     >
       {props.children}
