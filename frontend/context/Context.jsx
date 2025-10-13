@@ -12,9 +12,9 @@ const ContextProvider = (props) => {
   const [message, setMessage] = useState([]);
   const [input, setInput] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const [currentState, setCurrentState] = useState("login");
-
   //send message and recive a reply from gemini api
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -28,15 +28,26 @@ const ContextProvider = (props) => {
     if (!response) {
       toast.error("failled to send message");
     } else {
-      toast.success(response.data.reply);
       setInput("");
       setMessage((prev) => [
         ...prev,
         { sender: "ai", text: response.data.reply },
       ]);
-      toast.success(response.data.reply);
     }
   };
+
+  const loadingHandler = () => {
+    let senderCount = message.filter((msg) => msg.sender === "user").length;
+    let aiCount = message.filter((msg) => msg.sender === "ai").length;
+    if (senderCount > aiCount) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    loadingHandler();
+  }, [message]);
 
   return (
     <Context.Provider
@@ -52,6 +63,8 @@ const ContextProvider = (props) => {
         setInput,
         setIsEmpty,
         isEmpty,
+        loading,
+        setLoading,
       }}
     >
       {props.children}

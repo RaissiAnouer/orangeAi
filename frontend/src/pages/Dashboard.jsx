@@ -14,8 +14,8 @@ const Dashboard = () => {
     input,
     setIsEmpty,
     isEmpty,
+    loadingHandler,
   } = useContext(Context);
-
   return (
     <div className="flex w-full h-screen overflow-hidden">
       <Sidebar />
@@ -67,7 +67,13 @@ const Dashboard = () => {
           >
             How should we get started?
           </h1>
-          <form onSubmit={onSubmitHandler} className="flex flex-col ">
+          <form
+            onSubmit={(e) => {
+              onSubmitHandler(e);
+              loadingHandler(e);
+            }}
+            className="flex flex-col "
+          >
             <div className="flex items-center w-[90%] lg:w-4xl shadow-md h-[80px] rounded-lg border border-black/10  px-4 ">
               <input
                 onChange={(e) => setInput(e.target.value)}
@@ -84,7 +90,7 @@ const Dashboard = () => {
             </div>
             <p
               className={` ${
-                isEmpty === true ? "hidden" : ""
+                isEmpty === true ? "hidden" : " "
               } text-center text-sm font-light mb-8`}
             >
               orangeAi can make mistakes. Check important info.
