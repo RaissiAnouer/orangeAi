@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { assets } from "../assets/assets";
 import axios from "axios";
@@ -18,6 +18,12 @@ const Dashboard = () => {
     isLoading,
     isLoadingHandler,
   } = useContext(Context);
+  const targetRef = React.createRef();
+  useEffect(() => {
+    if (isLoading) {
+      targetRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [message]);
   return (
     <div className="flex w-full h-screen overflow-hidden">
       <Sidebar />
@@ -45,6 +51,8 @@ const Dashboard = () => {
               } mr-auto mt-5 gap-2`}
               key={idx}
             >
+              {msg.sender === "user" && <div ref={targetRef} />}
+
               <span
                 className={`inline-block p-2 rounded-lg max-w-[70%] ${
                   msg.sender === "user" ? "bg-orange-500 text-white" : ""
