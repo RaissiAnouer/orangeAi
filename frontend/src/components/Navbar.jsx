@@ -4,7 +4,7 @@ import { assets } from "../assets/assets";
 import Buttons from "./Buttons";
 import SButton from "./SButton";
 import { Link } from "react-router-dom";
-import { Context } from "../../context/context";
+import { Context } from "../../context/Context";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
