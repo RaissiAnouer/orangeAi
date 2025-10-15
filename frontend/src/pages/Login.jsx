@@ -8,15 +8,16 @@ import { Context } from "../../context/Context";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const { currentState, setCurrentState, backendUrl } = useContext(Context);
+  const { currentState, setCurrentState, backendUrl, token, setToken } =
+    useContext(Context);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password_confirmation, setPassword_confirmation] = useState("");
   const navigate = useNavigate();
 
-  const onSubmitHandler = async (event) => {
-    event.preventDefault();
+  const onLoginHandler = async (e) => {
+    e.preventDefault();
     try {
       if (currentState === "login") {
         const response = await axios.post(backendUrl + "/api/login", {
@@ -24,8 +25,11 @@ const Login = () => {
           password,
         });
         if (response.data.success) {
-          //setToken(response.data.token);
-          //localStorage.setItem("");
+          setToken(response.data.token);
+          toast.success(token);
+          localStorage.setItem("orangeAiToken", token);
+          toast.success("login successfull");
+          navigate("/dashboard");
         }
       } else {
         const response = await axios.post(backendUrl + "/api/register", {
@@ -35,17 +39,15 @@ const Login = () => {
           password_confirmation,
         });
         if (response.data.success) {
-          if (currentState === "login") {
-            navigate("/dashboard");
-          } else {
-            toast.success("account created");
-            setCurrentState("login");
-          }
+          toast.success("account created");
+          setCurrentState("login");
+          setEmail("");
+          setPassword("");
         }
       }
     } catch (error) {
       console.log(error);
-      alert("Something went wrong. Check console for details.");
+      toast("Something went wrong. Check console for details.");
     }
   };
 
@@ -63,7 +65,7 @@ const Login = () => {
           </h1>
           <div>
             <form
-              onSubmit={onSubmitHandler}
+              onSubmit={onLoginHandler}
               className="flex flex-col items-center pt-5 gap-5  justify-center"
             >
               {currentState === "signup" ? (
@@ -109,18 +111,13 @@ const Login = () => {
                 ""
               )}
 
-              {currentState === "login" ? (
-                <button className="w-2/3 sm:w-2/5  cursor-pointer py-1 bg-[#ff7300] text-white mt-5 px-10 rounded">
-                  Login
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  className="w-2/3 sm:w-2/5  cursor-pointer py-1 bg-[#ff7300] text-white mt-5 px-10 rounded"
-                >
-                  Sign Up
-                </button>
-              )}
+              <button
+                type="submit"
+                className="w-2/3 sm:w-2/5  cursor-pointer py-1 bg-[#ff7300] text-white mt-5 px-10 rounded"
+              >
+                {currentState === "login" ? <p>Login</p> : <p>Sign up</p>}
+              </button>
+
               <div className="flex w-2/3 sm:w-2/5 justify-between gap-1 sm:gap-10 text-xs text-gray-500 pt-1 ">
                 {currentState === "login" ? (
                   <p
