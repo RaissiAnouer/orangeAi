@@ -10,7 +10,6 @@ class GeminiController extends Controller
     public function chat(Request $request)
     {
         $userMessage=$request->input("message");
-
         $response=Http::withHeaders([
             'Content-Type'=>'application/json',
             'X-goog-api-key'=>env('GEMINI_API_KEY'),
