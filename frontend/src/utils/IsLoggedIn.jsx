@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { Outlet, useNavigate, Navigate } from "react-router-dom";
 import { Context } from "../../context/Context";
+import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedRoutes = () => {
+const IsLoggedIn = () => {
   const { token, authChecked } = useContext(Context);
   if (!authChecked) {
     return null;
   }
-  return token ? <Outlet /> : <Navigate to="/login" />;
+  return token ? <Navigate to={"/dashboard"} /> : <Outlet />;
 };
-export default ProtectedRoutes;
+export default IsLoggedIn;

@@ -1,19 +1,18 @@
 import axios from "axios";
 import React from "react";
 import { createContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export const Context = createContext();
 
 const ContextProvider = (props) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const navigate = useNavigate();
   const [message, setMessage] = useState([]);
   const [input, setInput] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState("");
+  const [authChecked, setAuthChecked] = useState(false);
 
   const [currentState, setCurrentState] = useState("login");
   //send message and recive a reply from gemini api
@@ -48,16 +47,26 @@ const ContextProvider = (props) => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!token && localStorage.getItem("orangeAiToken")) {
+      setToken(localStorage.getItem("orangeAiToken"));
+    }
+  }, []);
+
   useEffect(() => {
     isLoadingHandler();
   }, [message]);
+
+  useEffect(() => {
+    setAuthChecked(true);
+  }, []);
 
   return (
     <Context.Provider
       value={{
         currentState,
         setCurrentState,
-        navigate,
         backendUrl,
         message,
         setMessage,
@@ -70,6 +79,7 @@ const ContextProvider = (props) => {
         setIsLoading,
         token,
         setToken,
+        authChecked,
       }}
     >
       {props.children}
