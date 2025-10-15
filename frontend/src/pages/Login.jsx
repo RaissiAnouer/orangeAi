@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 
 import { assets } from "../assets/assets";
@@ -6,6 +6,7 @@ import { assets } from "../assets/assets";
 import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../../context/Context";
 import { toast } from "react-toastify";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const { currentState, setCurrentState, backendUrl, token, setToken } =
@@ -26,10 +27,10 @@ const Login = () => {
         });
         if (response.data.success) {
           setToken(response.data.token);
-          toast.success(token);
-          localStorage.setItem("orangeAiToken", token);
+          localStorage.setItem("orangeAiToken", response.data.token);
           toast.success("login successfull");
-          navigate("/dashboard");
+        } else {
+          toast.error(response.data.message);
         }
       } else {
         const response = await axios.post(backendUrl + "/api/register", {
@@ -51,6 +52,11 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    if (!token && localStorage.getItem("orangeAiToken")) {
+      setToken(localStorage.getItem("orangeAiToken"));
+    }
+  }, []);
   return (
     <>
       <div className="h-screen flex ">
@@ -110,6 +116,16 @@ const Login = () => {
               ) : (
                 ""
               )}
+              <div>
+                <GoogleLogin
+                  onSuccess={(credentialResponse) => {
+                    console.log(credentialResponse);
+                  }}
+                  onError={() => {
+                    console.log("Login Failed");
+                  }}
+                />
+              </div>
 
               <button
                 type="submit"
