@@ -35,4 +35,13 @@ class UserController extends Controller
         $token=$user->createToken('token')->plainTextToken;
         return response()->json(['success'=>true,'message'=>'Login successful!','token'=>$token]);
     }
+
+    public function googleLogin(Request $request)
+    {
+        $userEmail=$request->gmail;
+        $user=User::where("email",$userEmail)->firstOrFail();
+        $token=$user->createToken('token')->plainTextToken;
+        return response()->json(['success'=>true,'message'=>'login successful!','token'=>$token]);
+
+    }
 }

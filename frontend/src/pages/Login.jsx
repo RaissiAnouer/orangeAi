@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../../context/Context";
 import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const { currentState, setCurrentState, backendUrl, token, setToken } =
@@ -49,6 +50,21 @@ const Login = () => {
     } catch (error) {
       console.log(error);
       toast("Something went wrong. Check console for details.");
+    }
+  };
+
+  const googleOauthLogin = async (credential) => {
+    const decoded = jwtDecode(credential.credential);
+    try {
+      const response = await axios.post(backendUrl + "/api/googleLogin", {
+        token: decoded,
+      });
+      if (response.data.success) {
+        setToken(response.data.token);
+        localStorage.setItem("orangeAiToken", response.data.token);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
