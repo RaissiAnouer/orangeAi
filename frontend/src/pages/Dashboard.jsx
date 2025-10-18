@@ -41,7 +41,6 @@ const Dashboard = () => {
               </span>
             </h1>
           </div>
-          <img src={assets.avatar} className="h-10 w-10 mr-10" alt="" />
         </div>
         <div className="mx-auto w-4xl max-h-[600px] overflow-y-auto space-y-8">
           {message.map((msg, idx) => (

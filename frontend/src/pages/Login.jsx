@@ -54,10 +54,10 @@ const Login = () => {
   };
 
   const googleOauthLogin = async (credential) => {
-    const decoded = jwtDecode(credential.credential);
+    const decoded = jwtDecode(credential);
     try {
       const response = await axios.post(backendUrl + "/api/googleLogin", {
-        token: decoded,
+        email: decoded.email,
       });
       if (response.data.success) {
         setToken(response.data.token);
@@ -117,6 +117,7 @@ const Login = () => {
                 value={password}
                 type="password"
                 placeholder="Your Password"
+                autocomplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
               />
               {currentState === "signup" ? (
@@ -135,7 +136,7 @@ const Login = () => {
               <div>
                 <GoogleLogin
                   onSuccess={(credentialResponse) => {
-                    console.log(jwtDecode(credentialResponse.credential));
+                    googleOauthLogin(credentialResponse.credential);
                   }}
                   onError={() => {
                     console.log("Login Failed");
