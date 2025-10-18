@@ -39,9 +39,21 @@ class UserController extends Controller
     public function googleLogin(Request $request)
     {
         $userEmail=$request->email;
-        $user=User::where("email",$userEmail)->firstOrFail();
-        $token=$user->createToken('token')->plainTextToken;
-        return response()->json(['success'=>true,'message'=>'login successful!','token'=>$token]);
+        if($request->currentState==="login"){
+            $user=User::where("email",$userEmail)->firstOrFail();
+            $token=$user->createToken('token')->plainTextToken;
+            return response()->json(['success'=>true,'message'=>'login successful!','token'=>$token]);}
+        else {
+            $data=([
+                'name'=>$request->name,
+                'email'=>$request->email,
+                'password'=>Hash::make(Str::password(12))
+            ]);
+            $user=User::create($data);
+            return response()->json(['success'=>true,'message'=>'user created successfully'],201);
 
+
+            
+        }
     }
 }

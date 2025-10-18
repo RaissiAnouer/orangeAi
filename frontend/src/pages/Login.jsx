@@ -58,6 +58,7 @@ const Login = () => {
     try {
       const response = await axios.post(backendUrl + "/api/googleLogin", {
         email: decoded.email,
+        state: currentState,
       });
       if (response.data.success) {
         setToken(response.data.token);
