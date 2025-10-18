@@ -39,15 +39,15 @@ class UserController extends Controller
 
     public function googleLogin(Request $request)
     {
-        if($request->currentState==="login"){
-            $userEmail=$request->email;
+        if($request->state ==="login"){
+            $userEmail=$request->UserData['email'];
             $user=User::where("email",$userEmail)->firstOrFail();
             $token=$user->createToken('token')->plainTextToken;
             return response()->json(['success'=>true,'message'=>'login successful!','token'=>$token]);}
         else {
             $validatedData=([
-                'name'=>$request->name,
-                'email'=>$request->email,
+                'name'=>$request->UserData['name'],
+                'email'=>$request->UserData['email'],
                 'password'=>Hash::make(Str::password(12))
             ]);
             $user=User::create($validatedData);
