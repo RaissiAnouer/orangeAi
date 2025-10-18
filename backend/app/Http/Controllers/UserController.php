@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -38,21 +39,19 @@ class UserController extends Controller
 
     public function googleLogin(Request $request)
     {
-        $userEmail=$request->email;
         if($request->currentState==="login"){
+            $userEmail=$request->email;
             $user=User::where("email",$userEmail)->firstOrFail();
             $token=$user->createToken('token')->plainTextToken;
             return response()->json(['success'=>true,'message'=>'login successful!','token'=>$token]);}
         else {
-            $data=([
+            $validatedData=([
                 'name'=>$request->name,
                 'email'=>$request->email,
                 'password'=>Hash::make(Str::password(12))
             ]);
-            $user=User::create($data);
+            $user=User::create($validatedData);
             return response()->json(['success'=>true,'message'=>'user created successfully'],201);
-
-
             
         }
     }

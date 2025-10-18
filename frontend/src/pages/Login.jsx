@@ -57,7 +57,7 @@ const Login = () => {
     const decoded = jwtDecode(credential);
     try {
       const response = await axios.post(backendUrl + "/api/googleLogin", {
-        email: decoded.email,
+        data: decoded,
         state: currentState,
       });
       if (response.data.success) {
