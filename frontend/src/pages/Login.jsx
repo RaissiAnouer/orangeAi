@@ -57,7 +57,7 @@ const Login = () => {
     const decoded = jwtDecode(credential);
     try {
       const response = await axios.post(backendUrl + "/api/googleLogin", {
-        data: decoded,
+        UserData: decoded,
         state: currentState,
       });
       if (response.data.success) {
@@ -118,7 +118,7 @@ const Login = () => {
                 value={password}
                 type="password"
                 placeholder="Your Password"
-                autocomplete="current-password"
+                autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
               />
               {currentState === "signup" ? (
