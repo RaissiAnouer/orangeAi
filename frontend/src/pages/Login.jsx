@@ -107,7 +107,7 @@ const Login = () => {
               <img src={assets.email} className="w-5 h-5 m-2" alt="" />
               <input
                 name="email"
-                className="flex-1 py-3 outline-none rounded "
+                className="flex-1 py-3 pl-1 outline-none rounded-r-xl"
                 value={email}
                 type="email"
                 placeholder="email address"
@@ -118,7 +118,7 @@ const Login = () => {
               <img src={assets.password} className="w-5 h-5 m-2" alt="" />
               <input
                 name="password"
-                className=" flex-1 py-3 outline-none"
+                className=" flex-1 py-3 pl-1 outline-none rounded-r-xl"
                 value={password}
                 type="password"
                 placeholder="Your Password"
