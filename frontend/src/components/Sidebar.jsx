@@ -8,16 +8,30 @@ const Sidebar = () => {
       <div
         className={`${
           openSidebar
-            ? " bg-[#FAFBFC] w-[100vw] md:w-[17vw] border-r-1 border-gray-200 "
-            : "w-[6vw] md:w-[2vw]"
-        }  transition-all duration-100 ease-in-out pt-4`}
+            ? " bg-[#FAFBFC] w-[100vw] md:w-[17vw] "
+            : "w-[6vw] md:w-[2vw] border-none"
+        }  transition-all duration-200 ease-in-out pt-4 border-r-1 border-gray-200 ml-4 `}
       >
-        <img
-          src={assets.menu}
-          onClick={() => setOpenSidebar(!openSidebar)}
-          className="w-6 h-6 m-3"
-          alt=""
-        />
+        <div
+          className={` ${
+            openSidebar ? "flex items-center justify-between" : ""
+          }`}
+        >
+          {openSidebar && (
+            <h1 className="font-bold text-gray-700/80 text-3xl ">
+              orange
+              <span className=" text-orange-500">Ai</span>
+            </h1>
+          )}
+          <img
+            src={assets.menu}
+            onClick={() => setOpenSidebar(!openSidebar)}
+            className={`w-5 h-5 ${
+              openSidebar ? " " : ""
+            } transition-all duration-200 ease-in-out mx-2`}
+            alt=""
+          />
+        </div>
       </div>
     </>
   );
