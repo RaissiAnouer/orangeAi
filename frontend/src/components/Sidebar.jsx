@@ -8,9 +8,9 @@ const Sidebar = () => {
       <div
         className={`${
           openSidebar
-            ? " bg-orange-500/80 w-[100vw] md:w-[20vw] "
+            ? " bg-[#FAFBFC] w-[100vw] md:w-[17vw] border-r-1 border-gray-200 "
             : "w-[6vw] md:w-[2vw]"
-        }  transition-all duration-300 ease-in-out pt-4`}
+        }  transition-all duration-100 ease-in-out pt-4`}
       >
         <img
           src={assets.menu}

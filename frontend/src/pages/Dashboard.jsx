@@ -29,19 +29,6 @@ const Dashboard = () => {
       <Sidebar />
 
       <div className="flex flex-1 flex-col w-full h-full mt-3 ">
-        <div className="flex justify-between w-full ">
-          <div className="flex gap-8 items-center">
-            <h1 className="font-bold text-gray-700/80 text-xl pt-2 pl-8">
-              orange
-              <span
-                className="
-        text-orange-500"
-              >
-                Ai
-              </span>
-            </h1>
-          </div>
-        </div>
         <div className="mx-auto w-4xl max-h-[600px] overflow-y-auto space-y-8">
           {message.map((msg, idx) => (
             <div
