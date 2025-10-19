@@ -74,102 +74,126 @@ const Login = () => {
   }, []);
   return (
     <>
-      <div className="h-screen flex ">
-        <img
-          className="hidden sm:block w-2/5  bg-cover "
-          src={assets.robot}
-          alt=""
-        />
-        <div className="flex flex-col  w-screen ">
-          <h1 className="text-black text-center pt-30 font-semibold text-5xl sm:text-7xl  pb-10">
-            Hello <span className="text-[#ff7300]"> Friend !</span>
+      <div className="h-screen flex-col  bg-[#FAFBFC]/70">
+        <div className="flex items-center justify-center gap-1 pt-[5vh]">
+          <img src={assets.orange} className="w-10 h-10" alt="" />
+
+          <h1 className="text-5xl text-center">
+            orange<span className="text-orange-600/70">Ai</span>
           </h1>
-          <div>
-            <form
-              onSubmit={onLoginHandler}
-              className="flex flex-col items-center pt-5 gap-5  justify-center"
-            >
-              {currentState === "signup" ? (
-                <input
-                  name="name"
-                  value={name}
-                  className="w-2/3 sm:w-2/5 py-1 px-3 border border-2 rounded"
-                  type="text"
-                  placeholder="Name"
-                  required
-                  onChange={(e) => setName(e.target.value)}
-                />
-              ) : (
-                ""
-              )}
+        </div>
+        <div className="flex flex-col w-screen items-center mt-[5vh] ">
+          <form
+            onSubmit={onLoginHandler}
+            className="flex flex-col items-center gap-5 py-10   w-[28vw] h-[65vh] border  border-gray-700/10 shadow-lg rounded-2xl bg-white "
+          >
+            <p className="w-5/6 text-sm text-gray-700/60">
+              Only login via email or Google
+            </p>
+            {currentState === "signup" ? (
+              <input
+                name="name"
+                value={name}
+                className="w-1/2  py-1 px-3 border border-2 rounded"
+                type="text"
+                placeholder="Name"
+                required
+                onChange={(e) => setName(e.target.value)}
+              />
+            ) : (
+              ""
+            )}
+            <div className="flex items-center  border border-1 border-gray-500/40 rounded-xl w-5/6">
+              <img src={assets.email} className="w-5 h-5 m-2" alt="" />
               <input
                 name="email"
-                className="w-2/3 sm:w-2/5 py-1 px-3 border border-2 rounded"
+                className="flex-1 py-3 outline-none rounded "
                 value={email}
                 type="email"
-                placeholder="Your Email"
+                placeholder="email address"
                 onChange={(e) => setEmail(e.target.value)}
               />
+            </div>
+            <div className="flex items-center  border border-1 border-gray-500/40 rounded-xl  w-5/6">
+              <img src={assets.password} className="w-5 h-5 m-2" alt="" />
               <input
                 name="password"
-                className="w-2/3 sm:w-2/5 py-1 rounded border border-2 px-3"
+                className=" flex-1 py-3 outline-none"
                 value={password}
                 type="password"
                 placeholder="Your Password"
                 autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {currentState === "signup" ? (
-                <input
-                  name="confirmation"
-                  value={password_confirmation}
-                  type="password"
-                  placeholder="password confiramtion"
-                  className="w-2/3 sm:w-2/5 py-1 px-3 border border-2 rounded"
-                  required
-                  onChange={(e) => setPassword_confirmation(e.target.value)}
-                />
+            </div>
+            {currentState === "signup" ? (
+              <input
+                name="confirmation"
+                value={password_confirmation}
+                type="password"
+                placeholder="password confiramtion"
+                className="w-2/3 sm:w-2/5 py-1 px-3 border border-2 rounded"
+                required
+                onChange={(e) => setPassword_confirmation(e.target.value)}
+              />
+            ) : (
+              ""
+            )}
+            <p className="w-5/6 text-sm text-gray-700/60">
+              By signing up or logging in, you consent to orangeAi's {""}
+              <span className="border-b-1 text-black cursor-pointer">
+                Terms of Use
+              </span>{" "}
+              and{" "}
+              <span className="border-b-1 text-black cursor-pointer">
+                Privacy Policy.
+              </span>
+            </p>
+            <button
+              type="submit"
+              className="w-5/6  cursor-pointer py-3 bg-[#ff7300] text-white  px-10 rounded-xl"
+            >
+              {currentState === "login" ? <p>Login</p> : <p>Sign up</p>}
+            </button>
+            <div className="flex w-5/6 justify-between items-center text-sm font-medium text-[#ff7300] pt-1 ">
+              <p className="cursor-pointer mt-[-15px]">Forgot Password?</p>
+
+              {currentState === "login" ? (
+                <p
+                  onClick={() => setCurrentState("signup")}
+                  className="cursor-pointer mt-[-15px]"
+                >
+                  Sign Up?
+                </p>
               ) : (
-                ""
+                <p
+                  onClick={() => setCurrentState("login")}
+                  className="cursor-pointer mt-[-15px]"
+                >
+                  Login
+                </p>
               )}
-              <div>
-                <GoogleLogin
-                  onSuccess={(credentialResponse) => {
-                    googleOauthLogin(credentialResponse.credential);
-                  }}
-                  onError={() => {
-                    console.log("Login Failed");
-                  }}
-                />
-              </div>
+            </div>
+            <div className="flex w-5/6 items-center">
+              <p className="bg-gray-500/10 h-[1px] w-[49%]"></p>
+              <p className="text-gray-700/30 text-sm">OR</p>
+              <p className="bg-gray-500/10 h-[1px] w-[49%]"></p>
+            </div>
 
-              <button
-                type="submit"
-                className="w-2/3 sm:w-2/5  cursor-pointer py-1 bg-[#ff7300] text-white mt-5 px-10 rounded"
-              >
-                {currentState === "login" ? <p>Login</p> : <p>Sign up</p>}
-              </button>
-
-              <div className="flex w-2/3 sm:w-2/5 justify-between gap-1 sm:gap-10 text-xs text-gray-500 pt-1 ">
-                {currentState === "login" ? (
-                  <p
-                    onClick={() => setCurrentState("signup")}
-                    className="cursor-pointer mt-[-15px]"
-                  >
-                    Sign Up?
-                  </p>
-                ) : (
-                  <p
-                    onClick={() => setCurrentState("login")}
-                    className="cursor-pointer mt-[-15px]"
-                  >
-                    Login
-                  </p>
-                )}
-                <p className="cursor-pointer mt-[-15px]">Forgot Password?</p>
-              </div>
-            </form>
-          </div>
+            <div>
+              <GoogleLogin
+                width="500px"
+                size="large"
+                theme="filled_blue"
+                onSuccess={(credentialResponse) => {
+                  googleOauthLogin(credentialResponse.credential);
+                }}
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+              />
+            </div>
+          </form>
         </div>
       </div>
     </>
