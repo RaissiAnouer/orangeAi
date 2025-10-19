@@ -8,7 +8,6 @@ import { Context } from "../../context/Context";
 import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-
 const Login = () => {
   const { currentState, setCurrentState, backendUrl, token, setToken } =
     useContext(Context);
@@ -68,7 +67,6 @@ const Login = () => {
       console.log(error);
     }
   };
-
   useEffect(() => {
     if (!token && localStorage.getItem("orangeAiToken")) {
       setToken(localStorage.getItem("orangeAiToken"));
@@ -177,5 +175,4 @@ const Login = () => {
     </>
   );
 };
-
 export default Login;
