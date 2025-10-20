@@ -8,10 +8,12 @@ import avatar from './avatar.svg'
 import orange from './orangeAi.png'
 import email from './email.svg'
 import password from './password.svg'
+import name from './name.svg'
+import google from './google.svg'
 
 
 export const assets = {
-    menu, cross, robot, send, bot, avatar, orange, email, password
+    menu, cross, robot, send, bot, avatar, orange, email, password, name, google
 
 }
 

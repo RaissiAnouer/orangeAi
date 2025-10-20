@@ -3,11 +3,12 @@ import axios from "axios";
 
 import { assets } from "../assets/assets";
 
-import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../../context/Context";
 import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import { useGoogleLogin } from "@react-oauth/google";
+
 const Login = () => {
   const { currentState, setCurrentState, backendUrl, token, setToken } =
     useContext(Context);
@@ -15,7 +16,10 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password_confirmation, setPassword_confirmation] = useState("");
-  const navigate = useNavigate();
+
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse) => console.log(tokenResponse),
+  });
 
   const onLoginHandler = async (e) => {
     e.preventDefault();
@@ -78,28 +82,31 @@ const Login = () => {
         <div className="flex items-center justify-center gap-1 pt-[5vh]">
           <img src={assets.orange} className="w-10 h-10" alt="" />
 
-          <h1 className="text-5xl text-center">
+          <h1 className="text-4xl text-center">
             orange<span className="text-orange-600/70">Ai</span>
           </h1>
         </div>
         <div className="flex flex-col w-screen items-center mt-[5vh] ">
           <form
             onSubmit={onLoginHandler}
-            className="flex flex-col items-center gap-5 py-10   w-[28vw] h-[65vh] border  border-gray-700/10 shadow-lg rounded-2xl bg-white "
+            className="flex flex-col items-center gap-5 py-10 border max-w-sm sm:max-w-md  border-gray-700/10 shadow-lg rounded-2xl bg-white "
           >
             <p className="w-5/6 text-sm text-gray-700/60">
               Only login via email or Google
             </p>
             {currentState === "signup" ? (
-              <input
-                name="name"
-                value={name}
-                className="w-1/2  py-1 px-3 border border-2 rounded"
-                type="text"
-                placeholder="Name"
-                required
-                onChange={(e) => setName(e.target.value)}
-              />
+              <div className="flex items-center  border border-1 border-gray-500/40 rounded-xl w-5/6">
+                <img src={assets.name} className="w-5 h-5 m-2" alt="" />
+                <input
+                  name="name"
+                  value={name}
+                  className="flex-1 py-3 pl-1 outline-none rounded-r-xl "
+                  type="text"
+                  placeholder="Name"
+                  required
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
             ) : (
               ""
             )}
@@ -127,15 +134,18 @@ const Login = () => {
               />
             </div>
             {currentState === "signup" ? (
-              <input
-                name="confirmation"
-                value={password_confirmation}
-                type="password"
-                placeholder="password confiramtion"
-                className="w-2/3 sm:w-2/5 py-1 px-3 border border-2 rounded"
-                required
-                onChange={(e) => setPassword_confirmation(e.target.value)}
-              />
+              <div className="flex items-center  border border-1 border-gray-500/40 rounded-xl  w-5/6">
+                <img src={assets.password} className="w-5 h-5 m-2" alt="" />
+                <input
+                  name="confirmation"
+                  value={password_confirmation}
+                  type="password"
+                  placeholder="password confiramtion"
+                  className="flex-1 py-3 pl-1 outline-none rounded-r-xl"
+                  required
+                  onChange={(e) => setPassword_confirmation(e.target.value)}
+                />
+              </div>
             ) : (
               ""
             )}
@@ -182,7 +192,7 @@ const Login = () => {
 
             <div>
               <GoogleLogin
-                width="500px"
+                width="376px"
                 size="large"
                 theme="filled_blue"
                 onSuccess={(credentialResponse) => {
