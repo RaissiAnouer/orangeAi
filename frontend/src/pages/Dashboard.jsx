@@ -28,8 +28,8 @@ const Dashboard = () => {
     <div className="flex w-full h-screen overflow-hidden">
       <Sidebar />
 
-      <div className="flex flex-1 flex-col w-full h-full mt-3 ">
-        <div className="mx-auto w-4xl max-h-[600px] overflow-y-auto space-y-8">
+      <div className="flex flex-1 flex-col w-full h-full ">
+        <div className="mx-auto w-4xl  overflow-y-auto space-y-8">
           {message.map((msg, idx) => (
             <div
               className={`flex ${
@@ -61,7 +61,7 @@ const Dashboard = () => {
         <div
           className={`flex  flex-1 ${
             isEmpty === true
-              ? "flex-col items-center justify-center mb-40"
+              ? "flex-col items-center justify-center "
               : "justify-center items-end"
           } transition-all duration-300 ease-in-out `}
         >
@@ -78,7 +78,7 @@ const Dashboard = () => {
             }}
             className="flex flex-col "
           >
-            <div className="flex items-center w-[90%] lg:w-4xl shadow-md h-[80px] rounded-lg border border-black/10  px-4 ">
+            <div className="flex items-center w-[90%] lg:w-4xl shadow-md py-3 rounded-lg border border-black/10  px-4 ">
               <input
                 onChange={(e) => setInput(e.target.value)}
                 value={input}
@@ -95,7 +95,7 @@ const Dashboard = () => {
             <p
               className={` ${
                 isEmpty === true ? "hidden" : " "
-              } text-center text-sm font-light mb-8`}
+              } text-center text-sm font-light mb-5`}
             >
               orangeAi can make mistakes. Check important info.
             </p>
