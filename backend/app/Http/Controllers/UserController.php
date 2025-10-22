@@ -36,21 +36,27 @@ class UserController extends Controller
         $token=$user->createToken('token')->plainTextToken;
         return response()->json(['success'=>true,'message'=>'Login successful!','token'=>$token]);
     }
-
     public function googleLogin(Request $request)
     {
-        if($request->state ==="login"){
-            $userEmail=$request->UserData['email'];
-            $user=User::where("email",$userEmail)->firstOrFail();
-            $token=$user->createToken('token')->plainTextToken;
-            return response()->json(['success'=>true,'message'=>'login successful!','token'=>$token]);}
-        else {
-            $validatedData=([
+        $validatedData=([
                 'name'=>$request->UserData['name'],
                 'email'=>$request->UserData['email'],
                 'password'=>Hash::make(Str::password(12))
             ]);
-            $user=User::create($validatedData);
+        $userEmail=$validatedData['email'];
+        $user=User::where("email",$userEmail)->first();
+        if($user && $request->state === "login"){
+            $token=$user->createToken('token')->plainTextToken;
+            return response()->json(['success'=>true,'message'=>'login successful!','token'=>$token]);}
+        elseif (!$user && $request->state === "login") {
+            return response()->json(['success'=>false,'message'=>'user doesnt exist']);
+        }    
+        elseif($user && $request->state === "signup") {
+            return response()->json(['success'=>false,'message'=>'user exsists']);
+        }else{
+            
+          $validatedData["profil_picture"]=$request->UserData['picture'];
+          $user=User::create($validatedData);
             return response()->json(['success'=>true,'message'=>'user created successfully'],201);
             
         }
