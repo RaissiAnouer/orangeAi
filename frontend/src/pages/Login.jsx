@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { useGoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { currentState, setCurrentState, backendUrl, token, setToken } =
@@ -16,15 +17,12 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password_confirmation, setPassword_confirmation] = useState("");
-
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => console.log(tokenResponse),
-  });
+  const navigate = useNavigate();
 
   const onLoginHandler = async (e) => {
     e.preventDefault();
-    try {
-      if (currentState === "login") {
+    if (currentState === "login") {
+      try {
         const response = await axios.post(backendUrl + "/api/login", {
           email,
           password,
@@ -36,7 +34,9 @@ const Login = () => {
         } else {
           toast.error(response.data.message);
         }
-      } else {
+      } catch (error) {}
+    } else {
+      try {
         const response = await axios.post(backendUrl + "/api/register", {
           name,
           email,
@@ -48,11 +48,13 @@ const Login = () => {
           setCurrentState("login");
           setEmail("");
           setPassword("");
+        } else {
+          toast(response.data.message);
         }
+      } catch (error) {
+        console.log(error);
+        toast("Something went wrong. Check console for details.");
       }
-    } catch (error) {
-      console.log(error);
-      toast("Something went wrong. Check console for details.");
     }
   };
 
@@ -65,10 +67,13 @@ const Login = () => {
       });
       if (response.data.success) {
         setToken(response.data.token);
-        localStorage.setItem("orangeAiToken", response.data.token);
+        setCurrentState("login");
+        localStorage.setItem("token", response.data.token);
+      } else {
+        toast(response.data.message);
       }
     } catch (error) {
-      console.log(error);
+      toast(error);
     }
   };
   useEffect(() => {
