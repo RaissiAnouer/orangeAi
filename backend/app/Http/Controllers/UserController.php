@@ -39,7 +39,7 @@ class UserController extends Controller
 
     public function googleLogin(Request $request)
     {
-        $userEmail=>$request->UserData['email'];
+        $userEmail=$request->UserData['email'];
         $user=User::where("email",$userEmail)->first();
         if($user){
             Auth::login($user);

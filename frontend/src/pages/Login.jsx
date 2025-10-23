@@ -61,10 +61,15 @@ const Login = () => {
   const googleOauthLogin = async (credential) => {
     const decoded = jwtDecode(credential);
     try {
-      const response = await axios.post(backendUrl + "/api/googleLogin", {
-        UserData: decoded,
-        state: currentState,
-      });
+      const response = await axios.post(
+        backendUrl +
+          (currentState === "login"
+            ? "/api/googleLogin"
+            : "/api/googleRegister"),
+        {
+          UserData: decoded,
+        }
+      );
       if (response.data.success) {
         setToken(response.data.token);
         setCurrentState("login");
