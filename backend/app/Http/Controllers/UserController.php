@@ -39,19 +39,33 @@ class UserController extends Controller
 
     public function googleLogin(Request $request)
     {
-        $validatedData=([
-                'name'=>$request->UserData['name'],
-                'email'=>$request->UserData['email'],
-                'password'=>Hash::make(Str::password(12)),
-                'picture'=>$request->UserData['picture']
-            ]);
-        $userEmail=$validatedData['email'];
+        $userEmail=>$request->UserData['email'];
         $user=User::where("email",$userEmail)->first();
         if($user){
             Auth::login($user);
             $token=$user->createToken('token')->plainTextToken;
             return response()->json(['success'=>true,'message'=>'login sucessful!','token'=>$token]);
-        }else{
-           return response()->json(['success'=>false,'message'=>'user not found']);
         }
-    }}
+        return response()->json(['success'=>false,'message'=>'user not found']);
+        
+    }
+
+    public function googleRegister(Request $request){
+
+        $userEmail= $request->UserData['email'];
+        $user=User::where("email",$userEmail)->first();
+        if($user) return response()->json(['success'=>false,'message'=>'user exists']);
+
+        $validatedData=[
+                'name'=>$request->UserData['name'],
+                'email'=>$request->UserData['email'],
+                'password'=>Hash::make(Str::password(12)),
+                'picture'=>$request->UserData['picture']
+            ];
+        User::create($validatedData);
+        return response()->json(['success'=>true,'message'=>'user created !!']);
+        
+    }
+
+
+}

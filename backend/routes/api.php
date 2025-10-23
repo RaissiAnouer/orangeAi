@@ -18,4 +18,5 @@ Route::post('/login',[UserController::class,'login']);
 Route::post('/chat',[GeminiController::class,'chat']);
 
 Route::post('/googleLogin',[UserController::class,'googleLogin']);
+Route::post('/googleRegister',[UserController::class,'googleRegister']);
 
