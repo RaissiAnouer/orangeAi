@@ -70,7 +70,7 @@ const Login = () => {
         setCurrentState("login");
         localStorage.setItem("token", response.data.token);
       } else {
-        toast(response.data.message);
+        toast.error(response.data.message);
       }
     } catch (error) {
       toast(error);
@@ -124,6 +124,7 @@ const Login = () => {
                 type="email"
                 placeholder="email address"
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
             <div className="flex items-center  border border-1 border-gray-500/40 rounded-xl  w-5/6">
@@ -136,6 +137,7 @@ const Login = () => {
                 placeholder="Your Password"
                 autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
             {currentState === "signup" ? (

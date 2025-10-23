@@ -52,7 +52,6 @@ class UserController extends Controller
             $token=$user->createToken('token')->plainTextToken;
             return response()->json(['success'=>true,'message'=>'login sucessful!','token'=>$token]);
         }else{
-            $user=User::create($validatedData);
-            return response()->json(['success'=>true,'message'=>'Account created !']);
+           return response()->json(['success'=>false,'message'=>'user not found']);
         }
     }}
