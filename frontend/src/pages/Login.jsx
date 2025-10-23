@@ -82,8 +82,8 @@ const Login = () => {
     }
   };
   useEffect(() => {
-    if (!token && localStorage.getItem("orangeAiToken")) {
-      setToken(localStorage.getItem("orangeAiToken"));
+    if (!token && localStorage.getItem("token")) {
+      setToken(localStorage.getItem("token"));
     }
   }, []);
   return (

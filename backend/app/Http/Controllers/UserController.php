@@ -51,11 +51,9 @@ class UserController extends Controller
     }
 
     public function googleRegister(Request $request){
-
         $userEmail= $request->UserData['email'];
         $user=User::where("email",$userEmail)->first();
         if($user) return response()->json(['success'=>false,'message'=>'user exists']);
-
         $validatedData=[
                 'name'=>$request->UserData['name'],
                 'email'=>$request->UserData['email'],
@@ -64,8 +62,6 @@ class UserController extends Controller
             ];
         User::create($validatedData);
         return response()->json(['success'=>true,'message'=>'user created !!']);
-        
     }
-
 
 }
