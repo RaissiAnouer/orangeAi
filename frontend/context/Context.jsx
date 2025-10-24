@@ -48,6 +48,10 @@ const ContextProvider = (props) => {
     }
   };
 
+  const getHandler = async () => {
+    const response = await axios.get(backendUrl + "/api/");
+  };
+
   useEffect(() => {
     if (!token && localStorage.getItem("token")) {
       setToken(localStorage.getItem("token"));

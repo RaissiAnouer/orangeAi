@@ -11,10 +11,11 @@ import password from './password.svg'
 import name from './name.svg'
 import google from './google.svg'
 import dots from './dots.svg'
+import logo from './logo.png'
 
 
 export const assets = {
-    menu, cross, robot, send, bot, avatar, orange, email, password, name, google, dots
+    menu, cross, robot, send, bot, avatar, orange, email, password, name, google, dots, logo
 
 }
 
