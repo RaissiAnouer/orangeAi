@@ -10,11 +10,14 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function getUser($id)
+    public function getUser()
     {
-        $user=User::findOrFail($id);
+        $user=Auth::user();
         return response()->json($user,200);
     }   
+    public function getNamePic(Request $request){
+        
+        }
 
     public function register(Request $request)
     {

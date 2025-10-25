@@ -17,6 +17,7 @@ const Dashboard = () => {
     isEmpty,
     isLoading,
     isLoadingHandler,
+    name,
   } = useContext(Context);
   const targetRef = React.createRef();
   useEffect(() => {

@@ -10,7 +10,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function(){
-
 Route::get('/user/{id}',[UserController::class,'getUser']);
 Route::post('/chat',[GeminiController::class,'chat']);
 

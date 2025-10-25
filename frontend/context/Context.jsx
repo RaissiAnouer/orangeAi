@@ -13,6 +13,8 @@ const ContextProvider = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState("");
   const [authChecked, setAuthChecked] = useState(false);
+  const [name, setName] = useState("");
+  const [picture, setPicture] = useState("");
 
   const [currentState, setCurrentState] = useState("login");
   //send message and recive a reply from gemini api
@@ -24,8 +26,8 @@ const ContextProvider = (props) => {
     }
     const response = await axios.post(
       backendUrl + "/api/chat",
-      { message: input }
-      //  { headers: { Authorization: `Bearer: ${token}` } }
+      { message: input },
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     if (!response) {
       toast.error("failled to send message");
@@ -38,6 +40,17 @@ const ContextProvider = (props) => {
     }
   };
 
+  const getUser = async () => {
+    const response = await axios.get(backendUrl + `/api/user`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response) {
+      setName(response.data.name);
+      setPicture(response.data.picture);
+      console.log(response.data);
+    }
+  };
+
   const isLoadingHandler = () => {
     let senderCount = message.filter((msg) => msg.sender === "user").length;
     let aiCount = message.filter((msg) => msg.sender === "ai").length;
@@ -46,10 +59,6 @@ const ContextProvider = (props) => {
     } else {
       setIsLoading(false);
     }
-  };
-
-  const getHandler = async () => {
-    const response = await axios.get(backendUrl + "/api/");
   };
 
   useEffect(() => {
@@ -65,6 +74,12 @@ const ContextProvider = (props) => {
   useEffect(() => {
     setAuthChecked(true);
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      getUser();
+    }
+  }, [token]);
 
   return (
     <Context.Provider
@@ -84,6 +99,8 @@ const ContextProvider = (props) => {
         token,
         setToken,
         authChecked,
+        name,
+        picture,
       }}
     >
       {props.children}
