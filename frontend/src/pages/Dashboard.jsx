@@ -28,7 +28,6 @@ const Dashboard = () => {
   return (
     <div className="flex w-full h-screen overflow-hidden">
       <Sidebar />
-
       <div className="flex flex-1 flex-col w-full h-full ">
         <div className="mx-auto w-4xl  overflow-y-auto space-y-8">
           {message.map((msg, idx) => (
@@ -86,11 +85,12 @@ const Dashboard = () => {
                 className="flex flex-1 h-full px-3 py-2 focus:outline-none"
                 placeholder="Type a message..."
               />
+              {open && <p>hello</p>}
               <button
                 type="submit"
-                className="sm:ml-2 bg-orange-500/80 rounded-full px-5 sm:p-2"
+                className="sm:ml-2 bg-orange-500/80 rounded-full  px-5 sm:p-2"
               >
-                <img src={assets.send} className="w-7 h-7" alt="Send" />
+                <img src={assets.send} className="w-7 h-7 " alt="Send" />
               </button>
             </div>
             <p
