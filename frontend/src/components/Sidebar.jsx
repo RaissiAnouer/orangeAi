@@ -24,6 +24,9 @@ const Sidebar = () => {
     if (openProfil) {
       document.addEventListener("mousedown", handleClickOutside);
     }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [openProfil]);
 
   return (
@@ -45,23 +48,27 @@ const Sidebar = () => {
               orange
               <span className=" text-orange-500">Ai</span>
             </h1>
-            <img
-              src={assets.menu}
-              onClick={() => setOpenSidebar(!openSidebar)}
-              className={`w-5 h-5 ${
-                openSidebar ? " " : ""
-              } transition-all duration-200 ease-in-out mx-2`}
-              alt=""
-            />
+            <div className="flex items-center gap-2">
+              <img src={assets.logo} className="w-5 h-5" alt="" />
+              <img
+                src={assets.menu}
+                onClick={() => setOpenSidebar(!openSidebar)}
+                className={`w-5 h-5 ${
+                  openSidebar ? " " : ""
+                } transition-all duration-200 ease-in-out mx-2 cursor-pointer`}
+                alt=""
+              />
+            </div>
           </div>
           <div className="mt-auto" ref={dropdownRef}>
             {openProfil && (
               <div className="absolute relative z-10 bg-white rounded-lg border-[1px] border-gray-200 shadow-sm p-1">
                 <button
                   onClick={logout}
-                  className="rounded-lg hover:bg-gray-500/10 w-full text-start p-2 cursor-pointer"
+                  className="rounded-lg hover:bg-gray-500/10 w-full text-start p-2 cursor-pointer flex items-center gap-2"
                 >
-                  logout
+                  <img className="w-5 h-5" src={assets.logout} alt="" />
+                  <p>Logout</p>
                 </button>
               </div>
             )}
