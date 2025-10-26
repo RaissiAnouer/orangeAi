@@ -59,7 +59,7 @@ const Sidebar = () => {
               <div className="absolute relative z-10 bg-white rounded-lg border-[1px] border-gray-200 shadow-sm p-1">
                 <button
                   onClick={logout}
-                  className="rounded-lg hover:bg-gray-500/10 w-full text-start p-2"
+                  className="rounded-lg hover:bg-gray-500/10 w-full text-start p-2 cursor-pointer"
                 >
                   logout
                 </button>
@@ -78,6 +78,7 @@ const Sidebar = () => {
                 <img
                   className="rounded-full w-9 h-9 border-[1px] border-gray-300"
                   src={picture}
+                  referrerPolicy="no-referrer"
                   alt=""
                 />
                 <p className=" text-gray-700/80 text-base font-medium">
