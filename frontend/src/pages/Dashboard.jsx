@@ -41,7 +41,9 @@ const Dashboard = () => {
 
               <span
                 className={`inline-block p-2 rounded-lg max-w-[70%] ${
-                  msg.sender === "user" ? "bg-orange-500 text-white" : ""
+                  msg.sender === "user"
+                    ? "bg-orange-500 text-white"
+                    : " text-[17px] font-[300] leading-[1.8]"
                 }`}
               >
                 {msg.text}
