@@ -48,14 +48,18 @@ const Sidebar = () => {
               orange
               <span className=" text-orange-500">Ai</span>
             </h1>
-            <div className="flex items-center gap-2">
-              <img src={assets.logo} className="w-5 h-5" alt="" />
+            <div className="flex items-center gap-3 mx-2">
+              <img
+                src={assets.logo}
+                className={`w-5 h-5 ${openSidebar ? "hidden" : ""}`}
+                alt=""
+              />
               <img
                 src={assets.menu}
                 onClick={() => setOpenSidebar(!openSidebar)}
                 className={`w-5 h-5 ${
                   openSidebar ? " " : ""
-                } transition-all duration-200 ease-in-out mx-2 cursor-pointer`}
+                } transition-all duration-200 ease-in-out  cursor-pointer`}
                 alt=""
               />
             </div>
