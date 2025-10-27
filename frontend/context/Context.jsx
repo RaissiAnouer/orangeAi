@@ -33,10 +33,8 @@ const ContextProvider = (props) => {
       toast.error("failled to send message");
     } else {
       setInput("");
-      setMessage((prev) => [
-        ...prev,
-        { sender: "ai", text: response.data.reply },
-      ]);
+      const replyParts = response.data.reply.split("**");
+      setMessage((prev) => [...prev, { sender: "ai", text: replyParts }]);
     }
   };
 

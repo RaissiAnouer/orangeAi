@@ -46,7 +46,18 @@ const Dashboard = () => {
                     : " text-[17px] font-[300] leading-[1.8]"
                 }`}
               >
-                {msg.text}
+                {Array.isArray(msg.text)
+                  ? msg.text.map((part, i) =>
+                      i % 2 === 1 ? (
+                        <strong className="text-xl" key={i}>
+                          <br />
+                          {part} <br />
+                        </strong>
+                      ) : (
+                        <span key={i}>{part}</span>
+                      )
+                    )
+                  : msg.text}
               </span>
             </div>
           ))}
