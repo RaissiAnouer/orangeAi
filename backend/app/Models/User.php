@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Models;
-use Laravel\Sanctum\HasApiTokens;
+use App\Models\Chat;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Chat;
+use App\Models\Conversation;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,6 +51,7 @@ class User extends Authenticatable
     }
     public function chat()
     {
-        return $this->hasMany(Chat::class);
+        return $this->hasMany(Conversation::class);
     }
+
 }
