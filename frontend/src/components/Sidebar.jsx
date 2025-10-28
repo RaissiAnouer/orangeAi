@@ -88,7 +88,7 @@ const Sidebar = () => {
                 {" "}
                 <img
                   className="rounded-full w-9 h-9 border-[1px] border-gray-300"
-                  src={picture}
+                  src={picture || null}
                   referrerPolicy="no-referrer"
                   alt=""
                 />
