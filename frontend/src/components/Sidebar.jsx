@@ -8,6 +8,14 @@ const Sidebar = () => {
   const [openProfil, SetOpenProfil] = useState(false);
   const dropdownRef = useRef(null);
   const { name, picture } = useContext(Context);
+  const [done, setDone] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (openSidebar) setDone(true);
+      else setDone(false);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [openSidebar]);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -76,28 +84,30 @@ const Sidebar = () => {
                 </button>
               </div>
             )}
-            <button
-              onClick={() => SetOpenProfil(!openProfil)}
-              className={`${
-                openSidebar
-                  ? "mt-auto text-sm mb-3 w-full py-2 hover:bg-gray-500/10 rounded-2xl cursor-pointer flex justify-between items-center px-3"
-                  : "hidden"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                {" "}
-                <img
-                  className="rounded-full w-9 h-9 border-[1px] border-gray-300"
-                  src={picture || null}
-                  referrerPolicy="no-referrer"
-                  alt=""
-                />
-                <p className=" text-gray-700/80 text-base font-medium">
-                  {name}
-                </p>
-              </div>
-              <img className="w-4 h-4" src={assets.dots} alt="" />
-            </button>
+            {done && (
+              <button
+                onClick={() => SetOpenProfil(!openProfil)}
+                className={`${
+                  openSidebar
+                    ? "mt-auto text-sm mb-3 w-full py-2 hover:bg-gray-500/10 rounded-2xl cursor-pointer flex justify-between items-center px-3"
+                    : "hidden"
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  {" "}
+                  <img
+                    className="rounded-full w-9 h-9 border-[1px] border-gray-300"
+                    src={picture || null}
+                    referrerPolicy="no-referrer"
+                    alt=""
+                  />
+                  <p className=" text-gray-700/80 text-base font-medium">
+                    {name}
+                  </p>
+                </div>
+                <img className="w-4 h-4" src={assets.dots} alt="" />
+              </button>
+            )}
           </div>
         </div>
       </div>
