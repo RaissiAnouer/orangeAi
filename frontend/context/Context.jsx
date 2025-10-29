@@ -61,6 +61,12 @@ const ContextProvider = (props) => {
     }
   };
 
+  const startNewConversation = async () => {
+    await axios.post(backendUrl + "/api/NewConversation", {
+      title: input,
+    });
+  };
+
   useEffect(() => {
     if (!token && localStorage.getItem("token")) {
       setToken(localStorage.getItem("token"));
@@ -101,6 +107,7 @@ const ContextProvider = (props) => {
         authChecked,
         name,
         picture,
+        startNewConversation,
       }}
     >
       {props.children}
