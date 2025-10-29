@@ -61,10 +61,24 @@ const ContextProvider = (props) => {
     }
   };
 
-  const startNewConversation = async () => {
-    await axios.post(backendUrl + "/api/NewConversation", {
-      title: input,
-    });
+  const startNewConversation = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(
+        backendUrl + "/api/newConversation",
+        {
+          title: input,
+        },
+        {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      toast.error("failed to start new conversation");
+      console.log(error);
+    }
   };
 
   useEffect(() => {
