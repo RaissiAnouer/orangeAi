@@ -50,7 +50,6 @@ class UserController extends Controller
             return response()->json(['success'=>true,'message'=>'login sucessful!','token'=>$token]);
         }
         return response()->json(['success'=>false,'message'=>'user not found']);
-        
     }
 
     public function googleRegister(Request $request){

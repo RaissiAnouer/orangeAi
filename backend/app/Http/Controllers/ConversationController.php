@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 class ConversationController extends Controller
 {
     public function newConversation(Request $request){
-        $title=$request->title;
+        $userId=auth::User()->id;
+        $data=[
+        'title'=>$request->title,
+        'user_id'=>];
         Conversation::create($title);
     }
 
