@@ -15,9 +15,7 @@ class UserController extends Controller
         $user=Auth::user();
         return response()->json($user,200);
     }   
-    public function getNamePic(Request $request){
-        
-        }
+
 
     public function register(Request $request)
     {

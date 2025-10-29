@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Conversation extends Model
 {
-    protected $fillable=['user_id','title']
+    protected $fillable=['user_id','title'];
     
     public function user(){
-        return $this->belongsTo(User::class)
+        return $this->belongsTo(User::class);
     }
        
 }
