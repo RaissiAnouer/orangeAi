@@ -18,6 +18,7 @@ const Dashboard = () => {
     isLoading,
     isLoadingHandler,
     name,
+    backendUrl,
   } = useContext(Context);
   const targetRef = React.createRef();
   useEffect(() => {
@@ -25,6 +26,13 @@ const Dashboard = () => {
       targetRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [message]);
+
+  const startNewConversation = async () => {
+    await axios.post(backendUrl + "/api/NewConversation", {
+      title: input,
+    });
+  };
+
   return (
     <div className="flex w-full h-screen overflow-hidden">
       <Sidebar />
@@ -76,7 +84,7 @@ const Dashboard = () => {
           </h1>
           <form
             onSubmit={(e) => {
-              onSubmitHandler(e);
+              isEmpty ? onSubmitHandler(e) : startNewConversation(e);
             }}
             className="flex flex-col "
           >

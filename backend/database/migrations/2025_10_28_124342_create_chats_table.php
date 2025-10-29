@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('conversation_id')->index();
+            $table->foreignId('conversation_id')->constrained('conversations')->cascadeOnDelete()->index();
             $table->string('userMessage');
             $table->string('aiMessage');
             $table->timestamps();
