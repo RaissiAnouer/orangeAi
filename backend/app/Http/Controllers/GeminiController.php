@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -31,8 +32,11 @@ class GeminiController extends Controller
         $candidate = $reply['candidates'][0];
         if(!empty($candidate['content']['parts'])){
             $outputText=$candidate['content']['parts'][0]['text'] ?? 'No reply';
-        }   
+        }
     }
+    $data=['userMessage'=>$userMessage,
+    'aiMessage'=>$outputText];
+    Chat::create($data);
     return response()->json(['reply'=> $outputText]);
     }
 }
