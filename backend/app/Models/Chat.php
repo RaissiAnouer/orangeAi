@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Chat extends Model
 {
-    protected $fillable=['conversation_id','userMessage','aiMessage']
+    protected $fillable=['conversation_id','userMessage','aiMessage'];
     public function conversation(){
         return $this->belongsTo(Conversation::class);
     }

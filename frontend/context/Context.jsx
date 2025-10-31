@@ -15,28 +15,64 @@ const ContextProvider = (props) => {
   const [authChecked, setAuthChecked] = useState(false);
   const [name, setName] = useState("");
   const [picture, setPicture] = useState("");
+  const [conversationId, setConversationId] = useState(0);
 
   const [currentState, setCurrentState] = useState("login");
+
+  //create a conversation if its empty
+  const startNewConversation = async () => {
+    try {
+      const response = await axios.post(
+        backendUrl + "/api/newConversation",
+        {
+          title: input,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        setConversationId(response.data.conversation_id);
+        return response.data.conversation_id;
+      }
+    } catch (error) {
+      toast.error("failed to start new conversation");
+      console.log(error);
+      console.log("Conversation ID:", convId);
+    }
+  };
+
   //send message and recive a reply from gemini api
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    if (input !== "") {
-      setIsEmpty(false);
-      setMessage((prev) => [...prev, { sender: "user", text: input }]);
+    let convId = conversationId;
+    if (isEmpty) {
+      convId = await startNewConversation();
     }
-    const response = await axios.post(
-      backendUrl + "/api/chat",
-      { message: input },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    if (!response) {
-      toast.error("failled to send message");
-    } else {
-      setInput("");
-      setMessage((prev) => [
-        ...prev,
-        { sender: "ai", text: response.data.reply },
-      ]);
+    try {
+      if (input !== "") {
+        setIsEmpty(false);
+        setMessage((prev) => [...prev, { sender: "user", text: input }]);
+      }
+      const response = await axios.post(
+        backendUrl + "/api/chat",
+        { message: input, conversation_id: convId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (!response) {
+        toast.error("failled to send message");
+      } else {
+        setInput("");
+        setMessage((prev) => [
+          ...prev,
+          { sender: "ai", text: response.data.reply },
+        ]);
+      }
+    } catch (error) {
+      toast.error("failed to get ai response");
+      console.log(error);
     }
   };
 
@@ -58,26 +94,6 @@ const ContextProvider = (props) => {
       setIsLoading(true);
     } else {
       setIsLoading(false);
-    }
-  };
-
-  const startNewConversation = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post(
-        backendUrl + "/api/newConversation",
-        {
-          title: input,
-        },
-        {
-          headers: {
-            Authorization: `bearer ${token}`,
-          },
-        }
-      );
-    } catch (error) {
-      toast.error("failed to start new conversation");
-      console.log(error);
     }
   };
 
@@ -122,6 +138,7 @@ const ContextProvider = (props) => {
         name,
         picture,
         startNewConversation,
+        conversationId,
       }}
     >
       {props.children}

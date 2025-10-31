@@ -36,7 +36,8 @@ class GeminiController extends Controller
     }
     $data=['userMessage'=>$userMessage,
     'aiMessage'=>$outputText,
-'conversation_id'=>$request->conversation_id];
+    'conversation_id'=>$request->conversation_id];
+
     Chat::create($data);
     return response()->json(['reply'=> $outputText]);
     }

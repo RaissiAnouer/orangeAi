@@ -13,7 +13,8 @@ class ConversationController extends Controller
         $data=[
         'title'=>$request->title,
         'user_id'=>$userId];
-        Conversation::create($data);
+        $conversation=Conversation::create($data);
+        return response()->json(['success'=>true,'conversation_id'=>$conversation->id]);
     }
 
 }
