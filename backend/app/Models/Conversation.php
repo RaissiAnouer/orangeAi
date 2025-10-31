@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,5 +15,7 @@ class Conversation extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-       
+    public function chat(){
+        return $this->hasMany(Chat::class);
+    }
 }

@@ -49,7 +49,7 @@ class User extends Authenticatable
             //'password' => 'hashed',
         ];
     }
-    public function chat()
+    public function conversation()
     {
         return $this->hasMany(Conversation::class);
     }

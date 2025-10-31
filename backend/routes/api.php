@@ -13,8 +13,9 @@ Route::get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function(){
 Route::get('/user/{id}',[UserController::class,'getUser']);
 Route::post('/chat',[GeminiController::class,'chat']);
-Route::post('/newConversation',[ConversationController::class,'newConversation']);
-Route::get('/newConversation',[ConversationController::class,'getConversation']);
+Route::post('/newConversation',[ConversationController::class,'store']);
+Route::get('/getConversation/{id}',[ConversationController::class,'getConversation']);
+Route::get('/index',[ConversationController::class,'index']);
 });
 Route::post('/register',[UserController::class,'register']);
 Route::post('/login',[UserController::class,'login']);

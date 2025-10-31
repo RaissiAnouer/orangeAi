@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ConversationController extends Controller
 {
-    public function newConversation(Request $request){
+    public function store(Request $request){
         $userId=Auth::user()->id;
         $data=[
         'title'=>$request->title,
@@ -16,15 +16,19 @@ class ConversationController extends Controller
         $conversation=Conversation::create($data);
         return response()->json(['success'=>true,'conversation_id'=>$conversation->id]);
     }
+    public function index(){
+        $conversation=Auth::user()->conversation;
+        if(!$conversation) return response()->json(['success'=>false,'conversation'=>[]]);
+        return response()->json(['success'=>true,'conversation'=>$conversation]);
+        
+    }
+
 
     public function getConversation($id){
         $user=Auth::user();
         $conversation=$user->conversation()->findOrFail($id);
         if(!$conversation) return response()->json(['success'=>false,'message'=>'conversation doesn\'t exist']);
-        return response()->json(['success'=>false,$conversation]);
-        
-
-
+        return response()->json(['success'=>true,$conversation->chat]);
     }
 
 }
