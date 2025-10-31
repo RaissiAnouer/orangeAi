@@ -48,7 +48,7 @@ const ContextProvider = (props) => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     let convId = conversationId;
-    if (isEmpty) {
+    if (!convId) {
       convId = await startNewConversation();
     }
     try {
