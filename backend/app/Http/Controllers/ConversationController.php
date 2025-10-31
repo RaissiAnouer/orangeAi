@@ -17,4 +17,14 @@ class ConversationController extends Controller
         return response()->json(['success'=>true,'conversation_id'=>$conversation->id]);
     }
 
+    public function getConversation($id){
+        $user=Auth::user();
+        $conversation=$user->conversation()->findOrFail($id);
+        if(!$conversation) return response()->json(['success'=>false,'message'=>'conversation doesn\'t exist']);
+        return response()->json(['success'=>false,$conversation]);
+        
+
+
+    }
+
 }
