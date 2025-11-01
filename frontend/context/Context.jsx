@@ -23,7 +23,7 @@ const ContextProvider = (props) => {
   const startNewConversation = async () => {
     try {
       const response = await axios.post(
-        backendUrl + "/api/newConversation",
+        backendUrl + "/api/conversation/store",
         {
           title: input,
         },

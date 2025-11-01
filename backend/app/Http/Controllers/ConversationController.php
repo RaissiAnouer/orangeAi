@@ -22,13 +22,12 @@ class ConversationController extends Controller
         return response()->json(['success'=>true,'conversation'=>$conversation]);
         
     }
-
-
-    public function getConversation($id){
+    public function show($id){
         $user=Auth::user();
         $conversation=$user->conversation()->findOrFail($id);
         if(!$conversation) return response()->json(['success'=>false,'message'=>'conversation doesn\'t exist']);
         return response()->json(['success'=>true,$conversation->chat]);
     }
+
 
 }
