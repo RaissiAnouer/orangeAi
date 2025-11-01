@@ -13,9 +13,10 @@ Route::get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function(){
 Route::get('/user/{id}',[UserController::class,'getUser']);
 Route::post('/chat',[GeminiController::class,'chat']);
-Route::post('/conversation/store',[ConversationController::class,'store']);
-Route::get('/conversation/show/{id}',[ConversationController::class,'show']);
-Route::get('/conversation/index',[ConversationController::class,'index']);
+Route::post('/conversation',[ConversationController::class,'store']);
+Route::get('/conversation/{id}',[ConversationController::class,'show']);
+Route::get('/conversation',[ConversationController::class,'index']);
+Route::delete('/conversation/{id}',[ConversationController::class,'destroy']);
 });
 Route::post('/register',[UserController::class,'register']);
 Route::post('/login',[UserController::class,'login']);

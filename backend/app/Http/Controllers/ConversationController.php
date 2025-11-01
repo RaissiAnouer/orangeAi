@@ -17,17 +17,25 @@ class ConversationController extends Controller
         return response()->json(['success'=>true,'conversation_id'=>$conversation->id]);
     }
     public function index(){
-        $conversation=Auth::user()->conversation;
+        $conversation=Auth::user()->conversation()->latest()->get();
         if(!$conversation) return response()->json(['success'=>false,'conversation'=>[]]);
+        
+        
         return response()->json(['success'=>true,'conversation'=>$conversation]);
         
     }
     public function show($id){
         $user=Auth::user();
-        $conversation=$user->conversation()->findOrFail($id);
+        $conversation=$user->conversation()->find($id);
         if(!$conversation) return response()->json(['success'=>false,'message'=>'conversation doesn\'t exist']);
-        return response()->json(['success'=>true,$conversation->chat]);
+        return response()->json(['success'=>true,"chat"=>$conversation->chat]);
     }
 
+    public function destroy($id){
+        $conversation=Auth::user()->conversation()->find($id);
+        $conversation->delete();
+        return response()->json(['success'=>true,"message"=>'conversation deleted successfully']);
+    }
+    
 
 }
