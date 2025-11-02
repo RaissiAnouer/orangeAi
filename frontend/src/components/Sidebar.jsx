@@ -26,11 +26,26 @@ const Sidebar = () => {
 
   const getConv = async () => {
     try {
-      const response = await axios.get(backendUrl + "/api/conversation/index", {
+      const response = await axios.get(backendUrl + "/api/conversation", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.success) {
         setConversation(response.data.conversation);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }
+  };
+
+  const delConv = async (id) => {
+    try {
+      const response = await axios.delete(
+        backendUrl + `/api/conversation/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message);
       }
     } catch (error) {
       toast.error(error.message);
@@ -103,13 +118,12 @@ const Sidebar = () => {
           >
             {conversation.map((cnv, idx) => (
               <div className="flex flex-col w-full  " key={idx}>
-                <button className="hover:bg-gray-500/10 cursor-pointer py-2 text-start px-2 rounded-lg w-full truncate  ">
-                  {cnv.title}
+                <button className="flex items-center justify-between hover:bg-gray-500/10 cursor-pointer py-2 px-2 rounded-lg w-full   ">
+                  <p className="truncate">{cnv.title}</p>
                 </button>
               </div>
             ))}
           </div>
-
           <div className="" ref={dropdownRef}>
             {openProfil && (
               <div
