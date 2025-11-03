@@ -3,6 +3,7 @@ import { assets } from "../assets/assets";
 import { Context } from "../../context/Context";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { createPortal } from "react-dom";
 
 const Sidebar = () => {
   const { setToken, token, backendUrl, startNewConversation } =
@@ -12,6 +13,8 @@ const Sidebar = () => {
   const dropdownRef = useRef(null);
   const { name, picture } = useContext(Context);
   const [conversation, setConversation] = useState([]);
+  const [openMenu, setOpenMenu] = useState(false);
+  const buttonRef = useRef(null);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -72,7 +75,7 @@ const Sidebar = () => {
       <div
         className={`${
           openSidebar
-            ? "  bg-[#FAFBFC]  md:w-[17vw] "
+            ? "  bg-[#FAFBFC] md:w-[17vw] "
             : "sm:w-[6vw]  border-none"
         }  transition-all duration-100 ease-in-out pt-4 border-r-1 border-gray-200  px-2`}
       >
@@ -118,32 +121,39 @@ const Sidebar = () => {
           >
             {conversation.map((cnv, idx) => (
               <div className="flex flex-col w-full  " key={idx}>
-                <button className="flex items-center justify-between hover:bg-gray-500/10 cursor-pointer py-2 px-2 rounded-lg w-full   ">
+                <div className="relative flex items-center justify-between hover:bg-gray-500/10 cursor-pointer py-2 px-2 rounded-lg">
                   <p className="truncate">{cnv.title}</p>
-                </button>
+                  <button
+                    ref={buttonRef()}
+                    className=" rounded-full cursor-pointer my-auto  hover:bg-gray-500/10 "
+                    onClick={() => setOpenMenu(!openMenu)}
+                  >
+                    ...
+                  </button>
+                  {openMenu &&
+                    createPortal(
+                      <div
+                        className="absolute z-50 top-full left-full shadow-md bg-white p-2"
+                        style={{
+                          top:
+                            buttonRef.current.getboundingClientReact().bottom +
+                            "px",
+                          left:
+                            buttonRef.current.getboundingClientReact().right -
+                            140 +
+                            "px",
+                        }}
+                      >
+                        delete
+                      </div>,
+                      document.body
+                    )}
+                </div>
               </div>
             ))}
           </div>
-          <div className="" ref={dropdownRef}>
-            {openProfil && (
-              <div
-                className={`${
-                  openSidebar
-                    ? "absolute relative z-10 bg-white rounded-lg border-[1px] border-gray-200 shadow-sm p-1"
-                    : "hidden"
-                }`}
-              >
-                <button
-                  onClick={logout}
-                  className="rounded-lg hover:bg-gray-500/10 w-full text-start p-2 cursor-pointer flex items-center gap-2"
-                >
-                  <img className="w-5 h-5" src={assets.logout} alt="" />
-                  <p>Logout</p>
-                </button>
-              </div>
-            )}
-
-            <button
+          <div className="relative" ref={dropdownRef}>
+            <div
               onClick={() => SetOpenProfil(!openProfil)}
               className={`${
                 openSidebar
@@ -152,7 +162,6 @@ const Sidebar = () => {
               }`}
             >
               <div className="flex items-center gap-2">
-                {" "}
                 <img
                   className="rounded-full w-9 h-9 border-[1px] border-gray-300"
                   src={picture || null}
@@ -164,7 +173,18 @@ const Sidebar = () => {
                 </p>
               </div>
               <img className="w-4 h-4" src={assets.dots} alt="" />
-            </button>
+            </div>
+            {openProfil && (
+              <div className="absolute bottom-full mt-1 w-full bg-white  border-[1px]   border-gray-200  shadow-md rounded-lg ">
+                <div
+                  onClick={logout}
+                  className=" rounded-lg hover:bg-gray-200 w-full text-start p-2 cursor-pointer flex items-center gap-2 "
+                >
+                  <img className="w-5 h-5" src={assets.logout} alt="" />
+                  <p>Logout</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
