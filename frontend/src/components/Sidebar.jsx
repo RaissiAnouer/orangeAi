@@ -15,6 +15,7 @@ const Sidebar = () => {
   const [conversation, setConversation] = useState([]);
   const [openMenu, setOpenMenu] = useState(false);
   const buttonRef = useRef(null);
+  const [userId, setUserId] = useState(0);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -124,30 +125,22 @@ const Sidebar = () => {
                 <div className="relative flex items-center justify-between hover:bg-gray-500/10 cursor-pointer py-2 px-2 rounded-lg">
                   <p className="truncate">{cnv.title}</p>
                   <button
-                    ref={buttonRef()}
                     className=" rounded-full cursor-pointer my-auto  hover:bg-gray-500/10 "
-                    onClick={() => setOpenMenu(!openMenu)}
+                    id={cnv.id}
+                    onClick={() => {
+                      setOpenMenu(!openMenu);
+                      setUserId = cnv.id;
+                    }}
                   >
                     ...
                   </button>
-                  {openMenu &&
-                    createPortal(
-                      <div
-                        className="absolute z-50 top-full left-full shadow-md bg-white p-2"
-                        style={{
-                          top:
-                            buttonRef.current.getboundingClientReact().bottom +
-                            "px",
-                          left:
-                            buttonRef.current.getboundingClientReact().right -
-                            140 +
-                            "px",
-                        }}
-                      >
-                        delete
-                      </div>,
-                      document.body
-                    )}
+                  {openMenu && cnv.id === userId && (
+                    //         createPortal(
+                    <div className="absolute top-full left-full shadow-sm">
+                      <div className="fixed  bg-white p-2">delete</div>
+                    </div>
+                    //       document.body
+                  )}
                 </div>
               </div>
             ))}
