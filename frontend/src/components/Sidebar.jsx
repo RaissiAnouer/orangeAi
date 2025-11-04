@@ -136,12 +136,12 @@ const Sidebar = () => {
                   {openMenu && cnv.id === userId && (
                     //         createPortal(
                     <div className="absolute top-full right-5 z-50 ">
-                      <div className="fixed flex flex-col gap-2 items-center bg-white p-1 rounded-md shadow-md border-gray-200 border border-1 ">
-                        <div className=" p-2 flex gap-2 hover:bg-gray-200 rounded-md">
-                          <img className="w-5 h-5" src={assets.bin} alt="" />
-                          <p className="text-[#ff0000]">Delete</p>
+                      <div className="fixed flex flex-col gap-2 items-center bg-white p-1 rounded-md shadow-md border-gray-200 border border-1  ">
+                        <div className="w-full p-2 pr-8 flex gap-2 hover:bg-gray-400/10 rounded-md">
+                          <img className="w-5 h-5" src={assets.rename} alt="" />
+                          <p className="text-gray-700">Rename</p>
                         </div>
-                        <div className="p-2 flex gap-2 hover:bg-gray-200 rounded-md">
+                        <div className="w-full p-2   flex gap-2  rounded-md hover:bg-red-100/60">
                           <img className="w-5 h-5" src={assets.bin} alt="" />
                           <p className="text-[#ff0000]">Delete</p>
                         </div>
