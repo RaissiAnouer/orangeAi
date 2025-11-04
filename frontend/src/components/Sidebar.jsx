@@ -126,18 +126,26 @@ const Sidebar = () => {
                   <p className="truncate">{cnv.title}</p>
                   <button
                     className=" rounded-full cursor-pointer my-auto  hover:bg-gray-500/10 "
-                    id={cnv.id}
                     onClick={() => {
                       setOpenMenu(!openMenu);
-                      setUserId = cnv.id;
+                      setUserId(cnv.id);
                     }}
                   >
                     ...
                   </button>
                   {openMenu && cnv.id === userId && (
                     //         createPortal(
-                    <div className="absolute top-full left-full shadow-sm">
-                      <div className="fixed  bg-white p-2">delete</div>
+                    <div className="absolute top-full right-5 z-50 ">
+                      <div className="fixed flex flex-col gap-2 items-center bg-white p-1 rounded-md shadow-md border-gray-200 border border-1 ">
+                        <div className=" p-2 flex gap-2 hover:bg-gray-200 rounded-md">
+                          <img className="w-5 h-5" src={assets.bin} alt="" />
+                          <p className="text-[#ff0000]">Delete</p>
+                        </div>
+                        <div className="p-2 flex gap-2 hover:bg-gray-200 rounded-md">
+                          <img className="w-5 h-5" src={assets.bin} alt="" />
+                          <p className="text-[#ff0000]">Delete</p>
+                        </div>
+                      </div>
                     </div>
                     //       document.body
                   )}
