@@ -3,7 +3,8 @@ import { assets } from "../assets/assets";
 import { Context } from "../../context/Context";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { createPortal } from "react-dom";
+import Popper from "@mui/material/Popper";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 const Sidebar = () => {
   const { setToken, token, backendUrl, startNewConversation } =
@@ -13,9 +14,14 @@ const Sidebar = () => {
   const dropdownRef = useRef(null);
   const { name, picture } = useContext(Context);
   const [conversation, setConversation] = useState([]);
-  const [openMenu, setOpenMenu] = useState(false);
-  const buttonRef = useRef(null);
-  const [userId, setUserId] = useState(0);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popper" : undefined;
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -121,34 +127,40 @@ const Sidebar = () => {
             }`}
           >
             {conversation.map((cnv, idx) => (
-              <div className="flex flex-col w-full  " key={idx}>
+              <div className="flex flex-col w-full " key={idx}>
                 <div className="relative flex items-center justify-between hover:bg-gray-500/10 cursor-pointer py-2 px-2 rounded-lg">
                   <p className="truncate">{cnv.title}</p>
                   <button
+                    aria-describedby={id}
+                    type="button"
+                    onClick={handleClick}
                     className=" rounded-full cursor-pointer my-auto  hover:bg-gray-500/10 "
-                    onClick={() => {
-                      setOpenMenu(!openMenu);
-                      setUserId(cnv.id);
-                    }}
+                    /* onClick={() => {
+                        setOpenMenu(!openMenu);
+                        setUserId(cnv.id);
+                      }} */
                   >
                     ...
                   </button>
-                  {openMenu && cnv.id === userId && (
-                    //         createPortal(
-                    <div className="absolute top-full right-5 z-50 ">
-                      <div className="fixed flex flex-col gap-2 items-center bg-white p-1 rounded-md shadow-md border-gray-200 border border-1  ">
-                        <div className="w-full p-2 pr-8 flex gap-2 hover:bg-gray-400/10 rounded-md">
-                          <img className="w-5 h-5" src={assets.rename} alt="" />
-                          <p className="text-gray-700">Rename</p>
+                  <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
+                    <Popper
+                      id={id}
+                      open={open}
+                      anchorEl={anchorEl}
+                      placement="bottom-start"
+                    >
+                      <div className=" flex flex-col gap-2 items-center bg-white p-1 rounded-lg border-gray-200 border border-1  ">
+                        <div className="w-full p-2 pr-8 flex gap-2 items-center hover:bg-gray-400/10 rounded-md">
+                          <img className="w-4 h-4" src={assets.rename} alt="" />
+                          <p className="text-gray-700 text-base">Rename</p>
                         </div>
-                        <div className="w-full p-2   flex gap-2  rounded-md hover:bg-red-100/60">
-                          <img className="w-5 h-5" src={assets.bin} alt="" />
-                          <p className="text-[#ff0000]">Delete</p>
+                        <div className="w-full p-2  flex gap-2 items-center  rounded-md hover:bg-red-100/60">
+                          <img className="w-4 h-4" src={assets.bin} alt="" />
+                          <p className="text-[#ff0000] text-base">Delete</p>
                         </div>
                       </div>
-                    </div>
-                    //       document.body
-                  )}
+                    </Popper>
+                  </ClickAwayListener>
                 </div>
               </div>
             ))}
