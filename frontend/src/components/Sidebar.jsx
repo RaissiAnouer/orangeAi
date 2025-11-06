@@ -3,8 +3,6 @@ import { assets } from "../assets/assets";
 import { Context } from "../../context/Context";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Popper from "@mui/material/Popper";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
 
 const Sidebar = () => {
   const { setToken, token, backendUrl, startNewConversation } =
@@ -14,14 +12,8 @@ const Sidebar = () => {
   const dropdownRef = useRef(null);
   const { name, picture } = useContext(Context);
   const [conversation, setConversation] = useState([]);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popper" : undefined;
+  const [open, setOpen] = useState(false);
+  const [userId, setUserId] = useState(null);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -86,7 +78,7 @@ const Sidebar = () => {
             : "sm:w-[6vw]  border-none"
         }  transition-all duration-100 ease-in-out pt-4 border-r-1 border-gray-200  px-2`}
       >
-        <div className="flex flex-col justify-between h-full  ">
+        <div className="relative flex flex-col justify-between h-full  ">
           <div className="flex items-center justify-between">
             <h1
               className={`font-bold text-gray-700/80 text-xl sm:text-3xl ${
@@ -128,28 +120,22 @@ const Sidebar = () => {
           >
             {conversation.map((cnv, idx) => (
               <div className="flex flex-col w-full " key={idx}>
-                <div className="relative flex items-center justify-between hover:bg-gray-500/10 cursor-pointer py-2 px-2 rounded-lg">
+                <div className=" flex items-center justify-between hover:bg-gray-500/10 cursor-pointer py-2 px-2 rounded-lg">
                   <p className="truncate">{cnv.title}</p>
                   <button
-                    aria-describedby={id}
                     type="button"
-                    onClick={handleClick}
                     className=" rounded-full cursor-pointer my-auto  hover:bg-gray-500/10 "
-                    /* onClick={() => {
-                        setOpenMenu(!openMenu);
-                        setUserId(cnv.id);
-                      }} */
+                    onClick={() => {
+                      setOpen(!open);
+                      setUserId(cnv.id);
+                      console.log(cnv.id);
+                    }}
                   >
                     ...
                   </button>
-                  <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
-                    <Popper
-                      id={id}
-                      open={open}
-                      anchorEl={anchorEl}
-                      placement="bottom-start"
-                    >
-                      <div className=" flex flex-col gap-2 items-center bg-white p-1 rounded-lg border-gray-200 border border-1  ">
+                  {open && userId === cnv.id && (
+                    <div>
+                      <div className="absolute top-full right-0 z-50  flex flex-col gap-2 items-center bg-white p-1 rounded-lg border-gray-200 border border-1  ">
                         <div className="w-full p-2 pr-8 flex gap-2 items-center hover:bg-gray-400/10 rounded-md">
                           <img className="w-4 h-4" src={assets.rename} alt="" />
                           <p className="text-gray-700 text-base">Rename</p>
@@ -159,8 +145,8 @@ const Sidebar = () => {
                           <p className="text-[#ff0000] text-base">Delete</p>
                         </div>
                       </div>
-                    </Popper>
-                  </ClickAwayListener>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
