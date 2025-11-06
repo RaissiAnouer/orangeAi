@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - "releases/**"
+  label:
+    types:
+      - created
 
 jobs:
   build_push_backend_image:
