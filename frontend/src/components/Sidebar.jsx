@@ -130,30 +130,30 @@ const Sidebar = () => {
                     userId === cnv.id
                       ? "bg-gray-500/10"
                       : "hover:bg-gray-500/10 "
-                  }  cursor-pointer py-2 px-2 rounded-lg`}
+                  }  cursor-pointer py-2 px-2 rounded-lg `}
                 >
-                  <p className="truncate">{cnv.title}</p>
+                  <p className="truncate w-full">{cnv.title}</p>
                   <div className="relative">
                     <button
                       type="button"
                       className={` ${
                         userId === cnv.id ? "block" : "hidden group-hover:block"
                       }
-                          rounded-full cursor-pointer my-auto hover:bg-gray-500/10 `}
+                          rounded-full cursor-pointer hover:bg-gray-500/10  p-1`}
                       onClick={() => {
                         setOpen(!open);
                         setUserId(userId === null ? cnv.id : null);
                         console.log(cnv.id);
                       }}
                     >
-                      ...
+                      <img src={assets.dots} className="w-4 h-4" alt="" />
                     </button>
                     {open && userId === cnv.id && (
                       <div>
                         <div className="absolute top-full right-0 z-50 shadow-md flex flex-col gap-2 items-center bg-white p-1 rounded-lg border-gray-200 border border-1  ">
-                          <div className="w-full p-2 pr-8 flex gap-2 items-center hover:bg-gray-400/10 rounded-md">
+                          <div className="w-full p-2 pr-8 flex gap-2 items-center hover:bg-gray-400/10 rounded-md my-auto">
                             <img
-                              className="w-4 h-4"
+                              className="w-4 h-4 "
                               src={assets.rename}
                               alt=""
                             />
