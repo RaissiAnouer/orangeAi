@@ -123,13 +123,13 @@ const Sidebar = () => {
             }`}
           >
             {conversation.map((cnv, idx) => (
-              <div className="relative w-full " key={idx}>
+              <div className="relative group w-full " key={idx}>
                 <div className=" flex items-center justify-between hover:bg-gray-500/10 cursor-pointer py-2 px-2 rounded-lg">
                   <p className="truncate">{cnv.title}</p>
                   <div className="relative">
                     <button
                       type="button"
-                      className="  rounded-full cursor-pointer my-auto  hover:bg-gray-500/10 "
+                      className="hidden group-hover:block   rounded-full cursor-pointer my-auto  hover:bg-gray-500/10 "
                       onClick={() => {
                         setOpen(!open);
                         setUserId(cnv.id);

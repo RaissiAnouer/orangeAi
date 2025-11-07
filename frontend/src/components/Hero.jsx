@@ -47,13 +47,17 @@ const Hero = () => {
           <div className="absolute inset-0 flex justify-center">
             <div className="w-[500px] h-[120px] bg-orange-300 opacity-40 blur-2xl rounded-full"></div>
           </div>
-          <form className="z-10" onSubmit={onSubmitHandler}>
+          <form
+            className="z-10"
+            onSubmit={input.trim() ? onSubmitHandler : null}
+          >
             <input
               type="text"
               value={input}
               placeholder={displayedText}
               onChange={(e) => setInput(e.target.value)}
               className="z-10 px-4 py-3 border-2 border-[#ff7300] rounded-md w-[300px] sm:w-[500px] bg-white"
+              required
             />
             <button
               onClick={(e) => {
