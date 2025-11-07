@@ -48,6 +48,7 @@ const Sidebar = () => {
       );
       if (response.data.success) {
         toast.success(response.data.message);
+        getConv();
       }
     } catch (error) {
       toast.error(error.message);
@@ -71,7 +72,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     getConv();
-  }, [delConv]);
+  }, []);
 
   return (
     <>
@@ -124,15 +125,24 @@ const Sidebar = () => {
           >
             {conversation.map((cnv, idx) => (
               <div className="relative group w-full " key={idx}>
-                <div className=" flex items-center justify-between hover:bg-gray-500/10 cursor-pointer py-2 px-2 rounded-lg">
+                <div
+                  className={` flex items-center justify-between ${
+                    userId === cnv.id
+                      ? "bg-gray-500/10"
+                      : "hover:bg-gray-500/10 "
+                  }  cursor-pointer py-2 px-2 rounded-lg`}
+                >
                   <p className="truncate">{cnv.title}</p>
                   <div className="relative">
                     <button
                       type="button"
-                      className="hidden group-hover:block   rounded-full cursor-pointer my-auto  hover:bg-gray-500/10 "
+                      className={` ${
+                        userId === cnv.id ? "block" : "hidden group-hover:block"
+                      }
+                          rounded-full cursor-pointer my-auto hover:bg-gray-500/10 `}
                       onClick={() => {
                         setOpen(!open);
-                        setUserId(cnv.id);
+                        setUserId(userId === null ? cnv.id : null);
                         console.log(cnv.id);
                       }}
                     >
@@ -150,7 +160,7 @@ const Sidebar = () => {
                             <p className="text-gray-700 text-base">Rename</p>
                           </div>
                           <button
-                            className="w-full p-2  flex gap-2 items-center  rounded-md hover:bg-red-100/60"
+                            className="w-full p-2 cursor-pointer  flex gap-2 items-center  rounded-md hover:bg-red-100/60"
                             onClick={() => delConv(cnv.id)}
                           >
                             <img className="w-4 h-4" src={assets.bin} alt="" />
