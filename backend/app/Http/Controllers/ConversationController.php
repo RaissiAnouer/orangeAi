@@ -17,7 +17,7 @@ class ConversationController extends Controller
         return response()->json(['success'=>true,'conversation_id'=>$conversation->id]);
     }
     public function index(){
-        $conversation=Auth::user()->conversation()->latest()->get();
+        $conversation=Auth::user()->conversation()->orderBy('created_at' ,'desc')->get();
         if(!$conversation) return response()->json(['success'=>false,'conversation'=>[]]);
         
         
@@ -37,5 +37,11 @@ class ConversationController extends Controller
         return response()->json(['success'=>true,"message"=>'conversation deleted successfully']);
     }
     
+    public function rename(Request $request,$id){
+        $validatedData=$request->validate(['title'=>'string|required']);
+        $conversation=Auth::user()->conversation()->findOrFail($id);
+        $conversation->update($validatedData);
+        return response()->json(['success'=>true,'conversation'=>$conversation]);
+    }
 
 }
