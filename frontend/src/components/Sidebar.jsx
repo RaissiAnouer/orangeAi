@@ -14,6 +14,8 @@ const Sidebar = () => {
   const [conversation, setConversation] = useState([]);
   const [open, setOpen] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [title, setTitle] = useState("");
+  const [enable, setEnable] = useState(false);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -47,11 +49,26 @@ const Sidebar = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.data.success) {
-        toast.success(response.data.message);
         getConv();
+        toast.success(response.data.message);
       }
     } catch (error) {
       toast.error(error.message);
+      console.log(error);
+    }
+  };
+  const rename = async (title, id) => {
+    try {
+      const response = await axios.put(
+        backendUrl + `/api/conversation/rename/${id}`,
+        { title },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.data.success) {
+        getConv();
+        setUserId(null);
+      }
+    } catch (error) {
       console.log(error);
     }
   };
@@ -132,7 +149,20 @@ const Sidebar = () => {
                       : "hover:bg-gray-500/10 "
                   }  cursor-pointer py-2 px-2 rounded-lg `}
                 >
-                  <p className="truncate w-full">{cnv.title}</p>
+                  <input
+                    type="text"
+                    className="w-full truncate"
+                    defaultValue={cnv.title}
+                    id={cnv.id}
+                    onChange={(e) => setTitle(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        rename(title, userId);
+                      }
+                    }}
+                    onFocus={(e) => e.target.select()}
+                    disabled={!(enable && userId === cnv.id)}
+                  />
                   <div className="relative">
                     <button
                       type="button"
@@ -143,7 +173,6 @@ const Sidebar = () => {
                       onClick={() => {
                         setOpen(!open);
                         setUserId(userId === null ? cnv.id : null);
-                        console.log(cnv.id);
                       }}
                     >
                       <img src={assets.dots} className="w-4 h-4" alt="" />
@@ -151,14 +180,21 @@ const Sidebar = () => {
                     {open && userId === cnv.id && (
                       <div>
                         <div className="absolute top-full right-0 z-50 shadow-md flex flex-col gap-2 items-center bg-white p-1 rounded-lg border-gray-200 border border-1  ">
-                          <div className="w-full p-2 pr-8 flex gap-2 items-center hover:bg-gray-400/10 rounded-md my-auto">
+                          <button
+                            onClick={() => {
+                              setOpen(false);
+                              setUserId(cnv.id);
+                              setEnable(true);
+                            }}
+                            className="w-full p-2 pr-8 flex gap-2 items-center hover:bg-gray-400/10 rounded-md my-auto"
+                          >
                             <img
                               className="w-4 h-4 "
                               src={assets.rename}
                               alt=""
                             />
                             <p className="text-gray-700 text-base">Rename</p>
-                          </div>
+                          </button>
                           <button
                             className="w-full p-2 cursor-pointer  flex gap-2 items-center  rounded-md hover:bg-red-100/60"
                             onClick={() => delConv(cnv.id)}
