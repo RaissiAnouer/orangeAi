@@ -27,6 +27,13 @@ jobs:
               run: echo "eat breakfast"
             - name: going out
               run: echo "on my way to the uneversity" 
+    
+    attendingClassess:
+        runs-on: ubuntu-latest
+        needs: going_To_University
+        steps:
+            - name: server reseaux
+              run: echo "im in class right now"
 
 
     goodbye:
