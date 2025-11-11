@@ -9,7 +9,7 @@ on:
     workflow_dispatch:
 
 env:
-    REF: github.ref
+    REF: ${{github.ref}}
 
 jobs:
     helloWorld:
