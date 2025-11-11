@@ -16,8 +16,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - name: hello world
-              run: ec "hello $name"
+            - name: hello user
+              run: echo "hello $name"
 
     
     goodbye:
