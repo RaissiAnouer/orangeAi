@@ -1,13 +1,16 @@
 name: orangeAi workflow
 
 on:
-  push:
-    branches:
-      - main
-      - "releases/**"
-  label:
-    types:
-      - deleted
+    workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  #     - "releases/**"
+  # label:
+  #   types:
+  #     - deleted
+
+  
 
 jobs:
   build_push_backend_image:
