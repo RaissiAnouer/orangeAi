@@ -16,7 +16,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: hello user
-              if: ${{github.ref_name == 'main'}}
+              if: ${{github.ref_name == 'master'}}
               run: echo "hello ${{github.ref_name}}"
 
     
