@@ -3,6 +3,7 @@ import { assets } from "../assets/assets";
 import { Context } from "../../context/Context";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const {
@@ -10,17 +11,22 @@ const Sidebar = () => {
     token,
     backendUrl,
     startNewConversation,
+    delConv,
     getConv,
     conversation,
+    empty,
+    setEmpty,
   } = useContext(Context);
-  const [openSidebar, setOpenSidebar] = useState(false);
+  const [openSidebar, setOpenSidebar] = useState(true);
   const [openProfil, SetOpenProfil] = useState(false);
   const dropdownRef = useRef(null);
+  const conversationRef = useRef();
   const { name, picture } = useContext(Context);
   const [userId, setUserId] = useState(null);
   const [title, setTitle] = useState("");
   const [enable, setEnable] = useState(false);
   const [openDropDownId, setOpenDropDownId] = useState(null);
+  const navigate = useNavigate();
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -33,21 +39,6 @@ const Sidebar = () => {
     }
   };
 
-  const delConv = async (id) => {
-    try {
-      const response = await axios.delete(
-        backendUrl + `/api/conversation/${id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      if (response.data.success) {
-        getConv();
-        toast.success(response.data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-      console.log(error);
-    }
-  };
   const rename = async (title, id) => {
     try {
       const response = await axios.put(
@@ -72,6 +63,22 @@ const Sidebar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openProfil]);
+
+  //close conversation dropdown on outside click
+  useEffect(() => {
+    let handler = (e) => {
+      if (
+        conversationRef.current &&
+        !conversationRef.current.contains(e.target)
+      ) {
+        setOpenDropDownId(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+    };
+  });
 
   return (
     <>
@@ -108,22 +115,23 @@ const Sidebar = () => {
               />
             </div>
           </div>
-          <button
+          <Link
+            to={"/dashboard"}
             className={`${
               openSidebar
-                ? " w-full py-2 bg-white shadow-sm rounded-full cursor-pointer font-medium text-gray-700 border border-1 border-gray-200/80"
+                ? " w-full py-2 text-center hover:shadow-lg bg-white shadow-sm rounded-full cursor-pointer font-medium text-gray-700 border border-1 border-gray-200/80 transition-all duration-300 ease-in-out"
                 : "hidden"
             } `}
           >
             New Chat
-          </button>
+          </Link>
           <div
             className={`${
               openSidebar ? "h-[70%]  overflow-y-auto w-full" : "hidden"
             }`}
           >
-            {conversation.map((cnv, idx) => (
-              <div className="relative group w-full " key={idx}>
+            {conversation.map((cnv) => (
+              <div className="relative group w-full " key={cnv.id}>
                 <div
                   className={` flex items-center justify-between ${
                     userId === cnv.id
@@ -167,7 +175,7 @@ const Sidebar = () => {
                       <img src={assets.dots} className="w-4 h-4" alt="" />
                     </button>
                     {openDropDownId === cnv.id && (
-                      <div>
+                      <div ref={conversationRef}>
                         <div className="absolute top-full right-0 z-50 shadow-md flex flex-col gap-2 items-center bg-white p-1 rounded-lg border-gray-200 border border-1  ">
                           <button
                             onClick={() => {

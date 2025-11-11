@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import { Context } from "../context/Context";
 import IsLoggedIn from "./utils/IsLoggedIn";
+import ChatPage from "./pages/ChatPage";
 
 const App = () => {
   const { token } = useContext(Context);
@@ -24,7 +25,7 @@ const App = () => {
         </Route>
         <Route element={<ProtectedRoutes />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="/conversation/:conversationId" element={<ChatPage />} />
         </Route>
       </Routes>
     </>

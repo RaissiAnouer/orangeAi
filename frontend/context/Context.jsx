@@ -50,6 +50,7 @@ const ContextProvider = (props) => {
       );
       if (response.data.success) {
         setConversationId(response.data.conversation_id);
+        getConv();
         return response.data.conversation_id;
       }
     } catch (error) {
@@ -112,6 +113,21 @@ const ContextProvider = (props) => {
     }
   };
 
+  const delConv = async (id) => {
+    try {
+      const response = await axios.delete(
+        backendUrl + `/api/conversation/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.data.success) {
+        setConversation((prev) => prev.filter((conv) => conv.id !== id));
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (!token && localStorage.getItem("token")) {
       setToken(localStorage.getItem("token"));
@@ -158,6 +174,7 @@ const ContextProvider = (props) => {
         getConv,
         conversation,
         setConversation,
+        delConv,
       }}
     >
       {props.children}
