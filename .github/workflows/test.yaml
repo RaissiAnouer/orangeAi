@@ -16,7 +16,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: hello user
-              run: echo "hello $REF"
+              run: echo "hello ${{github.ref}}"
 
     
     goodbye:
