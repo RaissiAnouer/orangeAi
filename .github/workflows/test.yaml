@@ -9,14 +9,14 @@ on:
     workflow_dispatch:
 
 env:
-    NAME: anouer
+    REF: github.ref
 
 jobs:
     helloWorld:
         runs-on: ubuntu-latest
         steps:
             - name: hello user
-              run: echo "hello $NAME"
+              run: echo "hello $REF"
 
     
     goodbye:
