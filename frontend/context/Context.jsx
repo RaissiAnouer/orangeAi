@@ -15,9 +15,24 @@ const ContextProvider = (props) => {
   const [authChecked, setAuthChecked] = useState(false);
   const [name, setName] = useState("");
   const [picture, setPicture] = useState("");
+  const [conversation, setConversation] = useState([]);
   const [conversationId, setConversationId] = useState(0);
 
   const [currentState, setCurrentState] = useState("login");
+
+  const getConv = async () => {
+    try {
+      const response = await axios.get(backendUrl + "/api/conversation", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.data.success) {
+        setConversation(response.data.conversation);
+      }
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
+    }
+  };
 
   //create a conversation if its empty
   const startNewConversation = async () => {
@@ -114,6 +129,7 @@ const ContextProvider = (props) => {
   useEffect(() => {
     if (token) {
       getUser();
+      getConv();
     }
   }, [token]);
 
@@ -139,6 +155,9 @@ const ContextProvider = (props) => {
         picture,
         startNewConversation,
         conversationId,
+        getConv,
+        conversation,
+        setConversation,
       }}
     >
       {props.children}

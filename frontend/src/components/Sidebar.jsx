@@ -5,17 +5,22 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Sidebar = () => {
-  const { setToken, token, backendUrl, startNewConversation } =
-    useContext(Context);
+  const {
+    setToken,
+    token,
+    backendUrl,
+    startNewConversation,
+    getConv,
+    conversation,
+  } = useContext(Context);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [openProfil, SetOpenProfil] = useState(false);
   const dropdownRef = useRef(null);
   const { name, picture } = useContext(Context);
-  const [conversation, setConversation] = useState([]);
-  const [open, setOpen] = useState(false);
   const [userId, setUserId] = useState(null);
   const [title, setTitle] = useState("");
   const [enable, setEnable] = useState(false);
+  const [openDropDownId, setOpenDropDownId] = useState(null);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -25,20 +30,6 @@ const Sidebar = () => {
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       SetOpenProfil(false);
-    }
-  };
-
-  const getConv = async () => {
-    try {
-      const response = await axios.get(backendUrl + "/api/conversation", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (response.data.success) {
-        setConversation(response.data.conversation);
-      }
-    } catch (error) {
-      toast.error(error.message);
-      console.log(error);
     }
   };
 
@@ -74,7 +65,6 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    handleClickOutside;
     if (openProfil) {
       document.addEventListener("mousedown", handleClickOutside);
     }
@@ -82,14 +72,6 @@ const Sidebar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openProfil]);
-
-  useEffect(() => {
-    getConv();
-  }, [startNewConversation]);
-
-  useEffect(() => {
-    getConv();
-  }, []);
 
   return (
     <>
@@ -151,13 +133,17 @@ const Sidebar = () => {
                 >
                   <input
                     type="text"
-                    className="w-full truncate"
+                    className={`w-full truncate ${
+                      enable && userId === cnv.id ? "" : "cursor-pointer"
+                    }`}
                     defaultValue={cnv.title}
                     id={cnv.id}
                     onChange={(e) => setTitle(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         rename(title, userId);
+                        setEnable(false);
+                        setUserId(null);
                       }
                     }}
                     onFocus={(e) => e.target.select()}
@@ -167,24 +153,27 @@ const Sidebar = () => {
                     <button
                       type="button"
                       className={` ${
-                        userId === cnv.id ? "block" : "hidden group-hover:block"
+                        openDropDownId === cnv.id
+                          ? "block"
+                          : "hidden group-hover:block"
                       }
                           rounded-full cursor-pointer hover:bg-gray-500/10  p-1`}
                       onClick={() => {
-                        setOpen(!open);
-                        setUserId(userId === null ? cnv.id : null);
+                        setOpenDropDownId(
+                          openDropDownId === cnv.id ? null : cnv.id
+                        );
                       }}
                     >
                       <img src={assets.dots} className="w-4 h-4" alt="" />
                     </button>
-                    {open && userId === cnv.id && (
+                    {openDropDownId === cnv.id && (
                       <div>
                         <div className="absolute top-full right-0 z-50 shadow-md flex flex-col gap-2 items-center bg-white p-1 rounded-lg border-gray-200 border border-1  ">
                           <button
                             onClick={() => {
-                              setOpen(false);
                               setUserId(cnv.id);
                               setEnable(true);
+                              setOpenDropDownId(null);
                             }}
                             className="w-full p-2 pr-8 flex gap-2 items-center hover:bg-gray-400/10 rounded-md my-auto"
                           >
