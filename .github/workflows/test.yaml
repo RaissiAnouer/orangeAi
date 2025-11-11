@@ -8,13 +8,17 @@ on:
             - main
     workflow_dispatch:
 
+env:
+    NAME: anouer
+
 jobs:
     helloWorld:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
             - name: hello world
-              run: ec "hello world"
+              run: ec "hello $name"
+
     
     goodbye:
         runs-on: ubuntu-latest
