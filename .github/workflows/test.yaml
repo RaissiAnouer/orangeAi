@@ -1,0 +1,23 @@
+name: testing my github action skills
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    helloWorld:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: hello world
+              run: echo "hello world"
+    
+    goodbye:
+        runs-on: ubuntu-latest
+        needs: helloWorld
+        steps:
+            - name: goodbye
+              run: echo "goodbye sir"
