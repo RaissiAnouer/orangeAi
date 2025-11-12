@@ -10,8 +10,10 @@ class ConversationController extends Controller
 {
     public function store(Request $request){
         $userId=Auth::user()->id;
+        $validatedData= $request->validate([
+            "title"=>"required|string"]);
         $data=[
-        'title'=>$request->title,
+        'title'=>$validatedData['title'],
         'user_id'=>$userId];
         $conversation=Conversation::create($data);
         return response()->json(['success'=>true,'conversation_id'=>$conversation->id]);
