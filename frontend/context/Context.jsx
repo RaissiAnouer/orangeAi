@@ -2,6 +2,7 @@ import axios from "axios";
 import React from "react";
 import { createContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export const Context = createContext();
 
@@ -17,6 +18,7 @@ const ContextProvider = (props) => {
   const [picture, setPicture] = useState("");
   const [conversation, setConversation] = useState([]);
   const [conversationId, setConversationId] = useState(0);
+  const navigate = useNavigate();
 
   const [currentState, setCurrentState] = useState("login");
 
@@ -56,7 +58,6 @@ const ContextProvider = (props) => {
     } catch (error) {
       toast.error("failed to start new conversation");
       console.log(error);
-      console.log("Conversation ID:", convId);
     }
   };
 
@@ -66,6 +67,7 @@ const ContextProvider = (props) => {
     let convId = conversationId;
     if (!convId) {
       convId = await startNewConversation();
+      navigate(`/conversation/${convId}`);
     }
     try {
       if (input !== "") {
@@ -128,6 +130,12 @@ const ContextProvider = (props) => {
     }
   };
 
+  const resetForNewConversation = () => {
+    setConversationId(0);
+    setMessage([]);
+    setIsEmpty(true);
+  };
+
   useEffect(() => {
     if (!token && localStorage.getItem("token")) {
       setToken(localStorage.getItem("token"));
@@ -175,6 +183,8 @@ const ContextProvider = (props) => {
         conversation,
         setConversation,
         delConv,
+        setConversationId,
+        resetForNewConversation,
       }}
     >
       {props.children}

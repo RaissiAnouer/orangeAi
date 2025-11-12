@@ -5,19 +5,18 @@ import { assets } from "../assets/assets";
 import { Context } from "../../context/Context";
 
 const Dashboard = () => {
-  const { onSubmitHandler, setInput, input, startNewConversation } =
-    useContext(Context);
+  const {
+    onSubmitHandler,
+    setInput,
+    input,
+    startNewConversation,
+    resetForNewConversation,
+  } = useContext(Context);
   const navigate = useNavigate();
 
-  const handleNewChat = async (e) => {
-    e.preventDefault();
-
-    const newId = await startNewConversation();
-    if (newId) {
-      navigate(`/conversation/${newId}`);
-      setInput("");
-    }
-  };
+  useEffect(() => {
+    resetForNewConversation();
+  }, []);
 
   return (
     <div className="flex w-full h-screen overflow-hidden">
@@ -29,7 +28,7 @@ const Dashboard = () => {
           </h1>
           <form
             onSubmit={(e) => {
-              handleNewChat(e);
+              onSubmitHandler(e);
             }}
             className="flex flex-col "
           >
