@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { assets } from "../assets/assets";
 import { Context } from "../../context/Context";
+import TextareaAutosize from "react-textarea-autosize";
 
 const Dashboard = () => {
   const {
@@ -33,11 +34,19 @@ const Dashboard = () => {
             className="flex flex-col "
           >
             <div className="flex items-center w-[90%] lg:w-4xl shadow-md py-3 rounded-lg border border-black/10  px-4 ">
-              <input
+              <TextareaAutosize
                 onChange={(e) => setInput(e.target.value)}
                 value={input}
-                className="flex flex-1 h-full px-3 py-2 focus:outline-none"
+                className="flex flex-1  px-3 py-2 focus:outline-none resize-none rounded-md"
                 placeholder="Type a message..."
+                minRows={1}
+                maxRows={7}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    onSubmitHandler(e);
+                  }
+                }}
                 required
               />
               <button

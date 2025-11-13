@@ -38,7 +38,6 @@ const Sidebar = () => {
       SetOpenProfil(false);
     }
   };
-
   const rename = async (title, id) => {
     try {
       const response = await axios.put(
@@ -79,7 +78,6 @@ const Sidebar = () => {
       document.removeEventListener("mousedown", handler);
     };
   });
-
   return (
     <>
       <div

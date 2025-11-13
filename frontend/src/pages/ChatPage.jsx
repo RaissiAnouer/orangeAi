@@ -5,6 +5,9 @@ import axios from "axios";
 import { Context } from "../../context/Context";
 import { toast } from "react-toastify";
 import { ThreeDot } from "react-loading-indicators";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import TextareaAutosize from "react-textarea-autosize";
 
 const ChatPage = () => {
   const {
@@ -41,15 +44,17 @@ const ChatPage = () => {
               key={idx}
             >
               {msg.sender === "user" && <div ref={targetRef} />}
-              <span
+              <div
                 className={`inline-block p-2 rounded-lg max-w-[70%] ${
                   msg.sender === "user"
                     ? "bg-orange-500 text-white"
-                    : " text-[17px] font-[300] leading-[1.8]"
+                    : " text-gray-700 text-[16px] leading-relaxed "
                 }`}
               >
-                {msg.text}
-              </span>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {msg.text}
+                </ReactMarkdown>
+              </div>
             </div>
           ))}
           {isLoading && (
@@ -62,26 +67,21 @@ const ChatPage = () => {
             />
           )}
         </div>
-        <div
-          className={`flex  flex-1 ${
-            isEmpty === true
-              ? "flex-col items-center justify-center "
-              : "justify-center items-end"
-          } transition-all duration-300 ease-in-out `}
-        >
-          <h1
-            className={`text-2xl text-center font-medium    ${
-              isEmpty === true ? "mb-10" : "hidden"
-            }`}
-          >
-            How should we get started?
-          </h1>
+        <div className="flex  flex-1 justify-center items-end transition-all duration-300 ease-in-out ">
           <form onSubmit={(e) => onSubmitHandler(e)} className="flex flex-col ">
             <div className="flex items-center w-[90%] lg:w-4xl shadow-md py-3 rounded-lg border border-black/10  px-4 ">
-              <input
+              <TextareaAutosize
                 onChange={(e) => setInput(e.target.value)}
                 value={input}
-                className="flex flex-1 h-full px-3 py-2 focus:outline-none"
+                minRows={1}
+                maxRows={7}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    onSubmitHandler(e);
+                    setInput("");
+                  }
+                }}
+                className="flex flex-1 h-full px-3 py-2 focus:outline-none resize-none rounded-md"
                 placeholder="Type a message..."
                 required
               />
@@ -92,11 +92,7 @@ const ChatPage = () => {
                 <img src={assets.send} className="w-7 h-7 " alt="Send" />
               </button>
             </div>
-            <p
-              className={` ${
-                isEmpty === true ? "hidden" : " "
-              } text-center text-sm font-light mb-5`}
-            >
+            <p className="  text-center text-sm font-light mb-5">
               orangeAi can make mistakes. Check important info.
             </p>
           </form>
