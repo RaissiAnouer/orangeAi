@@ -66,13 +66,13 @@ const ContextProvider = (props) => {
       backendUrl + "/api/chat",
       {
         message:
-          "Summarize this chat in ONE short, clear title (max 6 words). Only output the title, no explanations: " +
-          inputValue,
+          "give the text inside <<>> a summery title just answer directly and short <<" +
+          inputValue +
+          ">>",
       },
       { headers: { Authorization: `Bearer ${token}` } }
     );
     if (response.data.success) {
-      toast.success(message);
       return response.data.reply;
     } else {
       return "new chat";
