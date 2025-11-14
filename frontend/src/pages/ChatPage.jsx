@@ -23,7 +23,7 @@ const ChatPage = () => {
     name,
     backendUrl,
     startNewConversation,
-    conversationId,
+    setInputValue,
   } = useContext(Context);
   const targetRef = React.createRef();
   useEffect(() => {
@@ -71,12 +71,15 @@ const ChatPage = () => {
           <form onSubmit={(e) => onSubmitHandler(e)} className="flex flex-col ">
             <div className="flex items-center w-[90%] lg:w-4xl shadow-md py-3 rounded-lg border border-black/10  px-4 ">
               <TextareaAutosize
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  setInputValue(e.target.value);
+                }}
                 value={input}
                 minRows={1}
                 maxRows={7}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
+                  if (e.key === "Enter" && !e.shiftKey && !isLoading) {
                     onSubmitHandler(e);
                     setInput("");
                   }
@@ -87,7 +90,12 @@ const ChatPage = () => {
               />
               <button
                 type="submit"
+                onSubmit={(e) => {
+                  onSubmitHandler();
+                  setInput("");
+                }}
                 className="sm:ml-2 bg-orange-500/80 rounded-full  px-5 sm:p-2"
+                disabled={isLoading}
               >
                 <img src={assets.send} className="w-7 h-7 " alt="Send" />
               </button>

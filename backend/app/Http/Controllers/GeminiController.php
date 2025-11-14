@@ -34,10 +34,12 @@ class GeminiController extends Controller
             $outputText=$candidate['content']['parts'][0]['text'] ?? 'No reply';
         }
     }
+    if($request->id){
     $data=['userMessage'=>$userMessage,
     'aiMessage'=>$outputText,
     'conversation_id'=>$request->conversation_id];
     Chat::create($data);
-    return response()->json(['reply'=> $outputText]);
+    }
+    return response()->json(['success'=>true,'reply'=> $outputText]);
     }
 }

@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 import { createContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -37,12 +36,13 @@ const ContextProvider = (props) => {
   };
 
   //create a conversation if its empty
-  const startNewConversation = async () => {
+  const startNewConversation = async (inputValue) => {
     try {
+      const title = await titleGenerator(inputValue);
       const response = await axios.post(
         backendUrl + "/api/conversation",
         {
-          title: input,
+          title,
         },
         {
           headers: {
@@ -61,32 +61,49 @@ const ContextProvider = (props) => {
     }
   };
 
+  const titleGenerator = async (inputValue) => {
+    const response = await axios.post(
+      backendUrl + "/api/chat",
+      {
+        message:
+          "Summarize this chat in ONE short, clear title (max 6 words). Only output the title, no explanations: " +
+          inputValue,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    if (response.data.success) {
+      toast.success(message);
+      return response.data.reply;
+    } else {
+      return "new chat";
+    }
+  };
+
   //send message and recive a reply from gemini api
-  const onSubmitHandler = async (e) => {
+  const onSubmitHandler = async (e, inputValue) => {
     e.preventDefault();
     let convId = conversationId;
     if (!convId) {
-      convId = await startNewConversation();
+      convId = await startNewConversation(inputValue);
       navigate(`/conversation/${convId}`);
     }
     try {
-      if (input !== "") {
+      if (inputValue !== "") {
         setIsEmpty(false);
-        setMessage((prev) => [...prev, { sender: "user", text: input }]);
-      }
-      const response = await axios.post(
-        backendUrl + "/api/chat",
-        { message: input, conversation_id: convId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      if (!response) {
-        toast.error("failled to send message");
-      } else {
-        setInput("");
-        setMessage((prev) => [
-          ...prev,
-          { sender: "ai", text: response.data.reply },
-        ]);
+        setMessage((prev) => [...prev, { sender: "user", text: inputValue }]);
+        const response = await axios.post(
+          backendUrl + "/api/chat",
+          { message: input, conversation_id: convId },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        if (!response) {
+          toast.error("failled to send message");
+        } else {
+          setMessage((prev) => [
+            ...prev,
+            { sender: "ai", text: response.data.reply },
+          ]);
+        }
       }
     } catch (error) {
       toast.error("failed to get ai response");

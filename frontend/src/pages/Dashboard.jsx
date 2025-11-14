@@ -35,7 +35,9 @@ const Dashboard = () => {
           >
             <div className="flex items-center w-[90%] lg:w-4xl shadow-md py-3 rounded-lg border border-black/10  px-4 ">
               <TextareaAutosize
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                }}
                 value={input}
                 className="flex flex-1  px-3 py-2 focus:outline-none resize-none rounded-md"
                 placeholder="Type a message..."
@@ -44,7 +46,9 @@ const Dashboard = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
-                    onSubmitHandler(e);
+                    const inputValue = input;
+                    setInput("");
+                    onSubmitHandler(e, inputValue);
                   }
                 }}
                 required
