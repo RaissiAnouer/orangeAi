@@ -23,7 +23,6 @@ const ChatPage = () => {
     name,
     backendUrl,
     startNewConversation,
-    setInputValue,
   } = useContext(Context);
   const targetRef = React.createRef();
   useEffect(() => {
@@ -35,7 +34,7 @@ const ChatPage = () => {
     <div className="flex w-full h-screen overflow-hidden">
       <Sidebar />
       <div className="flex flex-1 flex-col w-full h-full ">
-        <div className="mx-auto w-4xl  overflow-y-auto space-y-8">
+        <div className="mx-auto w-4xl h-full  overflow-y-auto space-y-2">
           {message.map((msg, idx) => (
             <div
               className={`flex ${
@@ -45,7 +44,7 @@ const ChatPage = () => {
             >
               {msg.sender === "user" && <div ref={targetRef} />}
               <div
-                className={`inline-block p-2 rounded-lg max-w-[70%] ${
+                className={`block p-2  rounded-lg max-w-[70%] break-words whitespace-pre-wrap ${
                   msg.sender === "user"
                     ? "bg-orange-500 text-white"
                     : " text-gray-700 text-[16px] leading-relaxed "
@@ -73,15 +72,15 @@ const ChatPage = () => {
               <TextareaAutosize
                 onChange={(e) => {
                   setInput(e.target.value);
-                  setInputValue(e.target.value);
                 }}
                 value={input}
                 minRows={1}
                 maxRows={7}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey && !isLoading) {
-                    onSubmitHandler(e);
+                    const inputValue = input;
                     setInput("");
+                    onSubmitHandler(e, inputValue);
                   }
                 }}
                 className="flex flex-1 h-full px-3 py-2 focus:outline-none resize-none rounded-md"

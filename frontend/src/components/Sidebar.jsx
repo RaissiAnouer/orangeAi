@@ -27,7 +27,6 @@ const Sidebar = () => {
   const [enable, setEnable] = useState(false);
   const [openDropDownId, setOpenDropDownId] = useState(null);
   const navigate = useNavigate();
-
   const logout = () => {
     localStorage.removeItem("token");
     setToken("");

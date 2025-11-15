@@ -93,7 +93,7 @@ const ContextProvider = (props) => {
         setMessage((prev) => [...prev, { sender: "user", text: inputValue }]);
         const response = await axios.post(
           backendUrl + "/api/chat",
-          { message: input, conversation_id: convId },
+          { message: inputValue, conversation_id: convId },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         if (!response) {
