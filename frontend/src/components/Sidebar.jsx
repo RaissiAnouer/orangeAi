@@ -16,6 +16,7 @@ const Sidebar = () => {
     conversation,
     empty,
     setEmpty,
+    setConversationId,
   } = useContext(Context);
   const [openSidebar, setOpenSidebar] = useState(true);
   const [openProfil, SetOpenProfil] = useState(false);
@@ -139,10 +140,18 @@ const Sidebar = () => {
                   <input
                     type="text"
                     className={`w-full truncate ${
-                      enable && userId === cnv.id ? "" : "cursor-pointer"
-                    }`}
+                      enable && userId === cnv.id
+                        ? ""
+                        : "cursor-pointer focus:outline-none"
+                    }
+                    
+                    `}
                     defaultValue={cnv.title}
                     id={cnv.id}
+                    onClick={() => {
+                      navigate(`/conversation/${cnv.id}`);
+                      setConversationId(cnv.id);
+                    }}
                     onChange={(e) => setTitle(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
@@ -151,8 +160,7 @@ const Sidebar = () => {
                         setUserId(null);
                       }
                     }}
-                    onFocus={(e) => e.target.select()}
-                    disabled={!(enable && userId === cnv.id)}
+                    readOnly={!(enable && userId === cnv.id)}
                   />
                   <div className="relative">
                     <button

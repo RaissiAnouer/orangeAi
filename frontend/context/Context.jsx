@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const Context = createContext();
 
@@ -17,10 +17,12 @@ const ContextProvider = (props) => {
   const [picture, setPicture] = useState("");
   const [conversation, setConversation] = useState([]);
   const [conversationId, setConversationId] = useState(0);
+  const [chat, setChat] = useState([]);
   const navigate = useNavigate();
 
   const [currentState, setCurrentState] = useState("login");
 
+  //get Conversation pour sidebar
   const getConv = async () => {
     try {
       const response = await axios.get(backendUrl + "/api/conversation", {
@@ -32,6 +34,21 @@ const ContextProvider = (props) => {
     } catch (error) {
       toast.error(error.message);
       console.log(error);
+    }
+  };
+
+  //get chat history
+  const getChat = async () => {
+    const response = await axios.get(
+      backendUrl + `/api/conversation/${conversationId}`,
+
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    if (response.data.success) {
+      setChat(response.data.chat);
+      console.log(response.data);
     }
   };
 
@@ -78,7 +95,6 @@ const ContextProvider = (props) => {
       return "new chat";
     }
   };
-
   //send message and recive a reply from gemini api
   const onSubmitHandler = async (e, inputValue) => {
     e.preventDefault();
@@ -174,6 +190,12 @@ const ContextProvider = (props) => {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (conversationId) {
+      getChat();
+    }
+  }, [conversationId]);
+
   return (
     <Context.Provider
       value={{
@@ -202,6 +224,8 @@ const ContextProvider = (props) => {
         delConv,
         setConversationId,
         resetForNewConversation,
+        getChat,
+        chat,
       }}
     >
       {props.children}

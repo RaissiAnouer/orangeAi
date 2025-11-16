@@ -23,8 +23,9 @@ const ChatPage = () => {
     name,
     backendUrl,
     startNewConversation,
+    chat,
   } = useContext(Context);
-  const targetRef = React.createRef();
+  const targetRef = useRef();
   useEffect(() => {
     if (isLoading) {
       targetRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -35,24 +36,22 @@ const ChatPage = () => {
       <Sidebar />
       <div className="flex flex-1 flex-col w-full h-full ">
         <div className="mx-auto w-4xl h-full  overflow-y-auto space-y-2">
-          {message.map((msg, idx) => (
-            <div
-              className={`flex ${
-                msg.sender === "user" ? "justify-end" : `justify-start`
-              } mr-auto mt-5 gap-2`}
-              key={idx}
-            >
-              {msg.sender === "user" && <div ref={targetRef} />}
-              <div
-                className={`block p-2  rounded-lg max-w-[70%] break-words whitespace-pre-wrap ${
-                  msg.sender === "user"
-                    ? "bg-orange-500 text-white"
-                    : " text-gray-700 text-[16px] leading-relaxed "
-                }`}
-              >
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {msg.text}
-                </ReactMarkdown>
+          {chat.map((cht, idx) => (
+            <div key={idx}>
+              <div className="flex  justify-end mr-auto mt-5 gap-2">
+                <div ref={targetRef} />
+                <div className="block p-2  rounded-lg max-w-[70%] break-words whitespace-pre-wrap bg-orange-500 text-white text-gray-700 text-[16px] leading-relaxed ">
+                  {cht.userMessage}
+                </div>
+              </div>
+              <div>
+                <div className="flex  justify-start mr-auto mt-5 gap-2">
+                  <div className="block p-2  rounded-lg max-w-[70%] break-words whitespace-pre-wrap text-white text-gray-700 text-[16px] leading-relaxed ">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {cht.aiMessage}
+                    </ReactMarkdown>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
@@ -67,7 +66,13 @@ const ChatPage = () => {
           )}
         </div>
         <div className="flex  flex-1 justify-center items-end transition-all duration-300 ease-in-out ">
-          <form onSubmit={(e) => onSubmitHandler(e)} className="flex flex-col ">
+          <form
+            onSubmit={(e) => {
+              onSubmitHandler(e);
+              setInput("");
+            }}
+            className="flex flex-col "
+          >
             <div className="flex items-center w-[90%] lg:w-4xl shadow-md py-3 rounded-lg border border-black/10  px-4 ">
               <TextareaAutosize
                 onChange={(e) => {
@@ -89,10 +94,6 @@ const ChatPage = () => {
               />
               <button
                 type="submit"
-                onSubmit={(e) => {
-                  onSubmitHandler();
-                  setInput("");
-                }}
                 className="sm:ml-2 bg-orange-500/80 rounded-full  px-5 sm:p-2"
                 disabled={isLoading}
               >
