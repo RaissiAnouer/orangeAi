@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 
 class GeminiController extends Controller
 {
-    public function chat(Request $request)
+    public function chat(Request $request,$id)
     {
         $userMessage=$request->input("message");
         $response=Http::withHeaders([
@@ -34,10 +34,10 @@ class GeminiController extends Controller
             $outputText=$candidate['content']['parts'][0]['text'] ?? 'No reply';
         }
     }
-    if($request->id){
+    if($id){
     $data=['userMessage'=>$userMessage,
     'aiMessage'=>$outputText,
-    'conversation_id'=>$request->conversation_id];
+    'conversation_id'=>$id];
     Chat::create($data);
     }
     return response()->json(['success'=>true,'reply'=> $outputText]);

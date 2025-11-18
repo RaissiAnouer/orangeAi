@@ -36,7 +36,6 @@ const ContextProvider = (props) => {
       console.log(error);
     }
   };
-
   //get chat history
   const getChat = async () => {
     const response = await axios.get(
@@ -80,7 +79,7 @@ const ContextProvider = (props) => {
 
   const titleGenerator = async (inputValue) => {
     const response = await axios.post(
-      backendUrl + "/api/chat",
+      backendUrl + `/api/conversation/chat`,
       {
         message:
           "give the text inside <<>> a summery title just answer directly and short <<" +
@@ -108,8 +107,8 @@ const ContextProvider = (props) => {
         setIsEmpty(false);
         setMessage((prev) => [...prev, { sender: "user", text: inputValue }]);
         const response = await axios.post(
-          backendUrl + "/api/chat",
-          { message: inputValue, conversation_id: convId },
+          backendUrl + `/api/conversation/${convId}/chat`,
+          { message: inputValue },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         if (!response) {
