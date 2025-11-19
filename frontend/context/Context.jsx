@@ -16,7 +16,6 @@ const ContextProvider = (props) => {
   const [name, setName] = useState("");
   const [picture, setPicture] = useState("");
   const [conversation, setConversation] = useState([]);
-  const [conversationId, setConversationId] = useState(0);
   const [chat, setChat] = useState([]);
   const navigate = useNavigate();
 
@@ -37,19 +36,6 @@ const ContextProvider = (props) => {
     }
   };
   //get chat history
-  const getChat = async () => {
-    const response = await axios.get(
-      backendUrl + `/api/conversation/${conversationId}`,
-
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    if (response.data.success) {
-      setChat(response.data.chat);
-      console.log(response.data);
-    }
-  };
 
   //create a conversation if its empty
   const startNewConversation = async (inputValue) => {
@@ -67,7 +53,6 @@ const ContextProvider = (props) => {
         }
       );
       if (response.data.success) {
-        setConversationId(response.data.conversation_id);
         getConv();
         return response.data.conversation_id;
       }
@@ -79,7 +64,7 @@ const ContextProvider = (props) => {
 
   const titleGenerator = async (inputValue) => {
     const response = await axios.post(
-      backendUrl + `/api/conversation/chat`,
+      backendUrl + `/api/conversation/0`,
       {
         message:
           "give the text inside <<>> a summery title just answer directly and short <<" +
@@ -95,29 +80,28 @@ const ContextProvider = (props) => {
     }
   };
   //send message and recive a reply from gemini api
-  const onSubmitHandler = async (e, inputValue) => {
+  const onSubmitHandler = async (e, inputValue, id) => {
     e.preventDefault();
-    let convId = conversationId;
-    if (!convId) {
-      convId = await startNewConversation(inputValue);
-      navigate(`/conversation/${convId}`);
-    }
     try {
+      if (!id) {
+        id = startNewConversation(inputValue);
+      }
       if (inputValue !== "") {
         setIsEmpty(false);
-        setMessage((prev) => [...prev, { sender: "user", text: inputValue }]);
+        setChat((prev) => [...prev, { sender: "user", text: inputValue }]);
         const response = await axios.post(
-          backendUrl + `/api/conversation/${convId}/chat`,
+          backendUrl + `/api/conversation/${id}`,
           { message: inputValue },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         if (!response) {
           toast.error("failled to send message");
         } else {
-          setMessage((prev) => [
+          setChat((prev) => [
             ...prev,
             { sender: "ai", text: response.data.reply },
           ]);
+          getChat(id);
         }
       }
     } catch (error) {
@@ -137,9 +121,23 @@ const ContextProvider = (props) => {
     }
   };
 
+  const getChat = async (id) => {
+    const response = await axios.get(
+      backendUrl + `/api/conversation/${id}`,
+
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    if (response.data.success) {
+      setChat(response.data.chat);
+      console.log(response.data);
+    }
+  };
+
   const isLoadingHandler = () => {
-    let senderCount = message.filter((msg) => msg.sender === "user").length;
-    let aiCount = message.filter((msg) => msg.sender === "ai").length;
+    let senderCount = chat.filter((msg) => msg.sender === "user").length;
+    let aiCount = chat.filter((msg) => msg.sender === "ai").length;
     if (senderCount > aiCount) {
       setIsLoading(true);
     } else {
@@ -163,8 +161,7 @@ const ContextProvider = (props) => {
   };
 
   const resetForNewConversation = () => {
-    setConversationId(0);
-    setMessage([]);
+    setChat([]);
     setIsEmpty(true);
   };
 
@@ -176,7 +173,7 @@ const ContextProvider = (props) => {
 
   useEffect(() => {
     isLoadingHandler();
-  }, [message]);
+  }, [chat]);
 
   useEffect(() => {
     setAuthChecked(true);
@@ -189,11 +186,7 @@ const ContextProvider = (props) => {
     }
   }, [token]);
 
-  useEffect(() => {
-    if (conversationId) {
-      getChat();
-    }
-  }, [conversationId]);
+  //useParamas enabled only if url has id
 
   return (
     <Context.Provider
@@ -216,15 +209,14 @@ const ContextProvider = (props) => {
         name,
         picture,
         startNewConversation,
-        conversationId,
         getConv,
         conversation,
         setConversation,
         delConv,
-        setConversationId,
         resetForNewConversation,
-        getChat,
         chat,
+        setChat,
+        getChat,
       }}
     >
       {props.children}

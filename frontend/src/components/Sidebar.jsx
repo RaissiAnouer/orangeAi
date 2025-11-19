@@ -16,7 +16,6 @@ const Sidebar = () => {
     conversation,
     empty,
     setEmpty,
-    setConversationId,
   } = useContext(Context);
   const [openSidebar, setOpenSidebar] = useState(true);
   const [openProfil, SetOpenProfil] = useState(false);
@@ -150,7 +149,6 @@ const Sidebar = () => {
                     id={cnv.id}
                     onClick={() => {
                       navigate(`/conversation/${cnv.id}`);
-                      setConversationId(cnv.id);
                     }}
                     onChange={(e) => setTitle(e.target.value)}
                     onKeyDown={(e) => {

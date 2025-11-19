@@ -34,7 +34,7 @@ class GeminiController extends Controller
             $outputText=$candidate['content']['parts'][0]['text'] ?? 'No reply';
         }
     }
-    if($id){
+    if ($id){
     $data=['userMessage'=>$userMessage,
     'aiMessage'=>$outputText,
     'conversation_id'=>$id];
@@ -42,4 +42,5 @@ class GeminiController extends Controller
     }
     return response()->json(['success'=>true,'reply'=> $outputText]);
     }
+
 }

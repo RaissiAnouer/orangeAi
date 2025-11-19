@@ -8,6 +8,7 @@ import { ThreeDot } from "react-loading-indicators";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import TextareaAutosize from "react-textarea-autosize";
+import { useParams } from "react-router-dom";
 
 const ChatPage = () => {
   const {
@@ -24,29 +25,41 @@ const ChatPage = () => {
     backendUrl,
     startNewConversation,
     chat,
+    token,
+    setChat,
+    getChat,
   } = useContext(Context);
+
+  const { conversationId } = useParams();
+
+  useEffect(() => {
+    if (conversationId) {
+      getChat(conversationId);
+    }
+  }, [conversationId]);
+
   const targetRef = useRef();
   useEffect(() => {
     if (isLoading) {
       targetRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [message]);
+  }, [chat]);
   return (
     <div className="flex w-full h-screen overflow-hidden">
       <Sidebar />
       <div className="flex flex-1 flex-col w-full h-full ">
-        <div className="mx-auto w-4xl h-full  overflow-y-auto space-y-2">
+        <div className="mx-auto w-4xl h-full  overflow-y-auto space-y-4">
           {chat.map((cht, idx) => (
             <div key={idx}>
               <div className="flex  justify-end mr-auto mt-5 gap-2">
                 <div ref={targetRef} />
-                <div className="block p-2  rounded-lg max-w-[70%] break-words whitespace-pre-wrap bg-orange-500 text-white text-gray-700 text-[16px] leading-relaxed ">
+                <div className="block p-2  rounded-lg max-w-[70%] break-words whitespace-pre-wrap bg-orange-500 text-white  text-[16px] leading-relaxed ">
                   {cht.userMessage}
                 </div>
               </div>
               <div>
                 <div className="flex  justify-start mr-auto mt-5 gap-2">
-                  <div className="block p-2  rounded-lg max-w-[70%] break-words whitespace-pre-wrap text-white text-gray-700 text-[16px] leading-relaxed ">
+                  <div className="block p-2  rounded-lg max-w-[70%] break-words whitespace-pre-wrap  text-gray-700 text-[16px] leading-relaxed ">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {cht.aiMessage}
                     </ReactMarkdown>
@@ -68,7 +81,8 @@ const ChatPage = () => {
         <div className="flex  flex-1 justify-center items-end transition-all duration-300 ease-in-out ">
           <form
             onSubmit={(e) => {
-              onSubmitHandler(e);
+              const inputValue = input;
+              onSubmitHandler(e, inputValue, conversationId);
               setInput("");
             }}
             className="flex flex-col "
@@ -84,8 +98,8 @@ const ChatPage = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey && !isLoading) {
                     const inputValue = input;
+                    onSubmitHandler(e, inputValue, conversationId);
                     setInput("");
-                    onSubmitHandler(e, inputValue);
                   }
                 }}
                 className="flex flex-1 h-full px-3 py-2 focus:outline-none resize-none rounded-md"

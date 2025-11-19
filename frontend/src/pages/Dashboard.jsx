@@ -43,12 +43,16 @@ const Dashboard = () => {
                 placeholder="Type a message..."
                 minRows={1}
                 maxRows={7}
-                onKeyDown={(e) => {
+                onKeyDown={async (e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
                     const inputValue = input;
                     setInput("");
-                    onSubmitHandler(e, inputValue);
+                    let id = await startNewConversation(inputValue);
+                    if (id) {
+                      navigate(`/conversation/${id}`);
+                      onSubmitHandler(e, inputValue, id);
+                    }
                   }
                 }}
                 required
